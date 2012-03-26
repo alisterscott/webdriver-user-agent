@@ -1,5 +1,9 @@
 # Gem History
 
+## 0.0.3 - 26 March 2012
+
+* Minor README formatting
+
 ## 0.0.2 - 26 March 2012
 
 * Added examples to README and spec for using Watir-WebDriver
