@@ -23,16 +23,16 @@ provides a UserAgent.driver method to return a new web-driver with user agent an
 ### Options
 
 * :browser
-** :firefox (default)
-** :chrome
+	* :firefox (default)
+	* :chrome
 * :agent
-** :iphone (default)
-** :ipad
-** :android_phone
-** :android_tablet
+	* :iphone (default)
+	* :ipad
+	* :android_phone
+	* :android_tablet
 * :orientation
-* :portrait (default)
-* :landscape
+	* :portrait (default)
+	* :landscape
 
 ### Example using selenium-webdriver
 
