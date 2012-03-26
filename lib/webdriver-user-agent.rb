@@ -1,7 +1,7 @@
 require 'selenium-webdriver'
 require 'facets/hash/except'
 
-class UserAgent
+module UserAgent
   def self.driver_for options={} 
     options[:browser] ||= :firefox
     options[:agent] ||= :iphone
@@ -20,9 +20,10 @@ class UserAgent
 
   def self.resize_inner_window driver, width, height
     if driver.browser == :firefox or :chrome
-      handles = driver.window_handles
-      driver.execute_script("window.open('about:blank','_blank','width=#{width},height=#{height}');")
-      driver.switch_to.window((driver.window_handles - handles).pop)
+      driver.execute_script("window.open('#{driver.current_url}','_blank');")
+        #{}'width=#{width},height=#{height}');")
+      driver.close
+      driver.switch_to.window driver.window_handles.first
     end
     driver.execute_script("window.innerWidth = #{width}; window.innerHeight = #{height};")
   end
