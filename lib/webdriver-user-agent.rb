@@ -1,27 +1,51 @@
 require 'selenium-webdriver'
 require 'facets/hash/except'
+require 'yaml'
 
 module UserAgent
-  def self.driver_for options={} 
+  def self.driver options={} 
     options[:browser] ||= :firefox
     options[:agent] ||= :iphone
     options[:orientation] ||= :portrait
     
-    if options[:browser] == :firefox
-      options[:profile] ||= Selenium::WebDriver::Firefox::Profile.new
-      options[:profile]['general.useragent.override'] = "Mozilla/5.0 (iPhone; U; CPU iPhone OS 4_3_2 like Mac OS X; en-us) AppleWebKit/533.17.9 (KHTML, like Gecko) Version/5.0.2 Mobile/8H7 Safari/6533.18.5"
+    user_agent_string = agent_string_for options[:agent]
+    device_resolution = resolution_for options[:agent], options[:orientation]
+
+    case options[:browser]
+      when :firefox
+        options[:profile] ||= Selenium::WebDriver::Firefox::Profile.new
+        options[:profile]['general.useragent.override'] = user_agent_string
+      when :chrome
+        options[:switches] ||= []
+        options[:switches] << "--user-agent=#{user_agent_string}"
+      else
+        raise "WebDriver UserAgent currently only supports :firefox and :chrome."
     end
     driver = Selenium::WebDriver.for options[:browser], options.except(:browser, :agent, :orientation)
-    resize_inner_window driver, 320, 356
+    resize_inner_window driver, *device_resolution
     driver
   end
+
+  def self.devices
+    @devices ||= YAML.load_file File.expand_path("../device-info/devices.yaml", __FILE__)
+  end
+
+  def self.resolution_for device_name, orientation
+    device = devices[device_name.downcase.to_sym][orientation.downcase.to_sym]
+    [device[:width],device[:height]]
+  end
+
+  def self.agent_string_for device
+    user_agent_string = devices[device.downcase.to_sym][:user_agent]
+    raise "Unsupported user agent: '#{options[:agent]}'." unless user_agent_string
+    user_agent_string 
+  end 
 
   private
 
   def self.resize_inner_window driver, width, height
     if driver.browser == :firefox or :chrome
-      driver.execute_script("window.open('#{driver.current_url}','_blank');")
-        #{}'width=#{width},height=#{height}');")
+      driver.execute_script("window.open(#{driver.current_url.to_json},'_blank');")
       driver.close
       driver.switch_to.window driver.window_handles.first
     end
