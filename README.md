@@ -22,20 +22,20 @@ provides a UserAgent.driver method to return a new web-driver with user agent an
 
 ### Example using selenium-webdriver
 
-require 'selenium-webdriver'
-require 'webdriver-user-agent'
-driver = UserAgent.driver(:browser => :chrome, :agent => :iphone, :orientation => :landscape)
-driver.get 'http://tiffany.com'
-driver.current_url.should == 'http://m.tiffany.com/International.aspx'
+	require 'selenium-webdriver'
+	require 'webdriver-user-agent'
+	driver = UserAgent.driver(:browser => :chrome, :agent => :iphone, :orientation => :landscape)
+	driver.get 'http://tiffany.com'
+	driver.current_url.should == 'http://m.tiffany.com/International.aspx'
 
 ### Example using watir-webdriver
 
-require 'watir-webdriver'
-require 'webdriver-user-agent'
-driver = UserAgent.driver(:browser => :chrome, :agent => :iphone, :orientation => :landscape)
-browser = Watir::Browser.new driver
-browser.goto 'tiffany.com'
-browser.url.should == 'http://m.tiffany.com/International.aspx'
+	require 'watir-webdriver'
+	require 'webdriver-user-agent'
+	driver = UserAgent.driver(:browser => :chrome, :agent => :iphone, :orientation => :landscape)
+	browser = Watir::Browser.new driver
+	browser.goto 'tiffany.com'
+	browser.url.should == 'http://m.tiffany.com/International.aspx'
 
 ## Contributing
 
