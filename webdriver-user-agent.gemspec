@@ -5,14 +5,14 @@ Gem::Specification.new do |gem|
   gem.email         = ["alister.scott@gmail.com"]
   gem.description   = %q{A helper gem to emulate populate device user agents and resolutions when using webdriver}
   gem.summary       = %q{A helper gem to emulate populate device user agents and resolutions when using webdriver}
-  gem.homepage      = ""
+  gem.homepage      = "https://github.com/alisterscott/webdriver-user-agent"
 
   gem.files         = `git ls-files`.split($\)
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
   gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
   gem.name          = "webdriver-user-agent"
   gem.require_paths = ["lib"]
-  gem.version       = "0.0.3"
+  gem.version       = "0.0.4"
   gem.add_dependency 'selenium-webdriver'
   gem.add_development_dependency 'rspec'
   gem.add_development_dependency 'facets'
