@@ -4,6 +4,7 @@ $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
 $LOAD_PATH.unshift(File.dirname(__FILE__))
 require 'webdriver-user-agent'
 require 'selenium-webdriver'
+require 'watir-webdriver'
 
 describe "webdriver user agent" do
   after :each do
@@ -44,7 +45,6 @@ describe "webdriver user agent" do
 
   it "can create a new webdriver driver using an existing firefox profile" do
     profile = Selenium::WebDriver::Firefox::Profile.new
-    #profile['browser.startup.page'] = 1
     profile['browser.startup.homepage'] = "data:text/html,<title>hello</title>"
     @driver = UserAgent.driver(:browser => :firefox, :profile => profile)
     @driver.browser.should == :firefox
@@ -52,7 +52,11 @@ describe "webdriver user agent" do
     @driver.execute_script('return window.innerWidth').should == 320 
     @driver.execute_script('return window.innerHeight').should == 356
     @driver.title.should == 'hello'
-  end 
+  end
 
-
+  it "can allow using selenium driver for watir browser" do
+    @driver = UserAgent.driver(:browser => :firefox, :agent => :iphone, :orientation => :portrait)
+    @browser = Watir::Browser.new @driver
+    @browser.url.should == "about:blank" 
+  end
 end

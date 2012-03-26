@@ -1,6 +1,6 @@
 # Webdriver::User::Agent
 
-TODO: Write a gem description
+A helper gem to emulate populate device user agents and resolutions when using webdriver
 
 ## Installation
 
@@ -18,7 +18,24 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+provides a UserAgent.driver method to return a new web-driver with user agent and screen resolution mimicking a mobile device.
+
+### Example using selenium-webdriver
+
+require 'selenium-webdriver'
+require 'webdriver-user-agent'
+driver = UserAgent.driver(:browser => :chrome, :agent => :iphone, :orientation => :landscape)
+driver.get 'http://tiffany.com'
+driver.current_url.should == 'http://m.tiffany.com/International.aspx'
+
+### Example using watir-webdriver
+
+require 'watir-webdriver'
+require 'webdriver-user-agent'
+driver = UserAgent.driver(:browser => :chrome, :agent => :iphone, :orientation => :landscape)
+browser = Watir::Browser.new driver
+browser.goto 'tiffany.com'
+browser.url.should == 'http://m.tiffany.com/International.aspx'
 
 ## Contributing
 
