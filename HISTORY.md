@@ -1,5 +1,9 @@
 # Gem History
 
+## 0.1.0 - 13 June 2012
+
+* Added support for ruby 1.8.x (see issue #3 on github https://github.com/alisterscott/webdriver-user-agent/issues/3)
+
 ## 0.0.5
 
 * Fixed dependency on facets which is actually a true dependency not just a development dependency.
