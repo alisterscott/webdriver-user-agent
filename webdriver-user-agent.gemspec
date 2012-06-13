@@ -15,6 +15,7 @@ Gem::Specification.new do |gem|
   gem.version       = "0.0.5"
   gem.add_dependency 'selenium-webdriver'
   gem.add_dependency 'facets'
+  gem.add_dependency 'json'
   gem.add_development_dependency 'rspec'
   gem.add_development_dependency 'watir-webdriver'
 end

@@ -1,6 +1,7 @@
 require 'selenium-webdriver'
 require 'facets/hash/except'
 require 'yaml'
+require 'json'
 
 module UserAgent
   def self.driver options={} 
@@ -31,12 +32,12 @@ module UserAgent
   end
 
   def self.resolution_for device_name, orientation
-    device = devices[device_name.downcase.to_sym][orientation.downcase.to_sym]
+    device = devices[downcase_sym device_name][downcase_sym orientation]
     [device[:width],device[:height]]
   end
 
   def self.agent_string_for device
-    user_agent_string = devices[device.downcase.to_sym][:user_agent]
+    user_agent_string = devices[downcase_sym device][:user_agent]
     raise "Unsupported user agent: '#{options[:agent]}'." unless user_agent_string
     user_agent_string 
   end 
@@ -50,5 +51,9 @@ module UserAgent
       driver.switch_to.window driver.window_handles.first
     end
     driver.execute_script("window.innerWidth = #{width}; window.innerHeight = #{height};")
+  end
+
+  def self.downcase_sym sym
+    sym.to_s.downcase.to_sym #to support ruby 1.8.x
   end
 end
