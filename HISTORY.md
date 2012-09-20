@@ -1,5 +1,9 @@
 # Gem History
 
+## 0.2.0 - 20 September 2012
+
+* Added support for a :random user agent (Idea based upon Christoph Pilka)
+
 ## 0.1.0 - 13 June 2012
 
 * Added support for ruby 1.8.x (see issue #3 on github https://github.com/alisterscott/webdriver-user-agent/issues/3)
