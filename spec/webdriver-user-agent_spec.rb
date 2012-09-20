@@ -43,6 +43,22 @@ describe "webdriver user agent" do
     @driver.execute_script('return window.innerHeight').should == 946
   end
 
+   it "can create a new webdriver driver using firefox and random user agent" do
+    @driver = UserAgent.driver(:agent => :random)
+    @driver.browser.should == :firefox
+    @driver.execute_script('return navigator.userAgent').should_not be_nil
+    @driver.execute_script('return window.innerWidth').should_not == 320 
+    @driver.execute_script('return window.innerHeight').should_not == 356
+  end
+
+  it "can create a new webdriver driver using chrome and random user agent" do
+    @driver = UserAgent.driver(:browser => :chrome, :agent => :random)
+    @driver.browser.should == :chrome
+    @driver.execute_script('return navigator.userAgent').should_not be_nil
+    @driver.execute_script('return window.innerWidth').should_not == 320 
+    @driver.execute_script('return window.innerHeight').should_not == 356
+  end
+
   it "can create a new webdriver driver using an existing firefox profile" do
     profile = Selenium::WebDriver::Firefox::Profile.new
     profile['browser.startup.homepage'] = "data:text/html,<title>hello</title>"
@@ -59,4 +75,8 @@ describe "webdriver user agent" do
     @browser = Watir::Browser.new @driver
     @browser.url.should == "about:blank" 
   end
+
+
+
+
 end

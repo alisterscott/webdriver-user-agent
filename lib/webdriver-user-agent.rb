@@ -10,8 +10,7 @@ module UserAgent
     options[:orientation] ||= :portrait
     
     user_agent_string = agent_string_for options[:agent]
-    device_resolution = resolution_for options[:agent], options[:orientation]
-
+    
     case options[:browser]
       when :firefox
         options[:profile] ||= Selenium::WebDriver::Firefox::Profile.new
@@ -23,7 +22,7 @@ module UserAgent
         raise "WebDriver UserAgent currently only supports :firefox and :chrome."
     end
     driver = Selenium::WebDriver.for options[:browser], options.except(:browser, :agent, :orientation)
-    resize_inner_window driver, *device_resolution
+    resize_inner_window(driver, *resolution_for(options[:agent], options[:orientation])) unless (downcase_sym(options[:agent]) == :random)
     driver
   end
 
@@ -37,7 +36,7 @@ module UserAgent
   end
 
   def self.agent_string_for device
-    user_agent_string = devices[downcase_sym device][:user_agent]
+    user_agent_string = downcase_sym(device) == :random ? random_user_agent : devices[downcase_sym device][:user_agent]
     raise "Unsupported user agent: '#{options[:agent]}'." unless user_agent_string
     user_agent_string 
   end 
@@ -56,4 +55,10 @@ module UserAgent
   def self.downcase_sym sym
     sym.to_s.downcase.to_sym #to support ruby 1.8.x
   end
+
+  def self.random_user_agent
+    File.foreach(File.expand_path("../device-info/user_agents.txt", __FILE__)).each_with_index.reduce(nil) { |picked,pair| 
+    rand < 1.0/(1+pair[1]) ? pair[0] : picked }
+  end
+
 end
