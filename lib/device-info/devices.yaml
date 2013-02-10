@@ -14,6 +14,14 @@
   :landscape:
     :width: 1024
     :height: 690
+:ipad3:
+  :user_agent: "Mozilla/5.0 (iPad; CPU OS 5_1 like Mac OS X) AppleWebKit/534.46 (KHTML, like Gecko) Version/5.1 Mobile/9B176 Safari/7534.48.3"
+  :portrait:
+    :width: 1536
+    :height: 2048
+  :landscape:
+    :width: 2048
+    :height: 1536
 :android_phone:
   :user_agent: "Mozilla/5.0 (Linux; U; Android 4.0.1; en-us; sdk Build/ICS_MR0) AppleWebKit/534.30 (KHTML, like Gecko) Version/4.0 Mobile Safari/534.30"
   :portrait:
