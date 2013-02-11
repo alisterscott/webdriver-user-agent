@@ -1,5 +1,9 @@
 # Gem History
 
+## 0.2.1 - 11 February 2012
+
+* Small changes for more compatibility alongside user-agent gem 
+
 ## 0.2.0 - 20 September 2012
 
 * Added support for a :random user agent (Idea based upon Christoph Pilka)
