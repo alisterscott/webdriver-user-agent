@@ -12,10 +12,11 @@ Gem::Specification.new do |gem|
   gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
   gem.name          = "webdriver-user-agent"
   gem.require_paths = ["lib"]
-  gem.version       = "0.2.2"
+  gem.version       = "6.6.6"
   gem.add_dependency 'selenium-webdriver'
   gem.add_dependency 'facets'
   gem.add_dependency 'json'
   gem.add_development_dependency 'rspec'
   gem.add_development_dependency 'watir-webdriver'
+  gem.post_install_message = "THIS GEM HAS BEEN DEPRECATED AND NO LONGER MAINTAINED"
 end
