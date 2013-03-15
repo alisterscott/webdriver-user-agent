@@ -1,5 +1,9 @@
 # Gem History
 
+## 0.2.2 - 15 March 2013
+
+* Updated iPad user agent
+
 ## 0.2.1 - 11 February 2012
 
 * Small changes for more compatibility alongside user-agent gem 
