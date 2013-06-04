@@ -18,5 +18,5 @@ Gem::Specification.new do |gem|
   gem.add_dependency 'json'
   gem.add_development_dependency 'rspec'
   gem.add_development_dependency 'watir-webdriver'
-  gem.post_install_message = "THIS GEM HAS BEEN DEPRECATED AND NO LONGER MAINTAINED"
+
 end
