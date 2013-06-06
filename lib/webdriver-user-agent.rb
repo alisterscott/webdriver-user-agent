@@ -2,6 +2,7 @@ require 'selenium-webdriver'
 require 'facets/hash/except'
 require 'yaml'
 require 'json'
+require 'core_ext/symbol'
 
 module Webdriver
   module UserAgent
@@ -23,7 +24,7 @@ module Webdriver
           raise "WebDriver UserAgent currently only supports :firefox and :chrome."
       end
       driver = Selenium::WebDriver.for options[:browser], options.except(:browser, :agent, :orientation)
-      resize_inner_window(driver, *resolution_for(options[:agent], options[:orientation])) unless (downcase_sym(options[:agent]) == :random)
+      resize_inner_window(driver, *resolution_for(options[:agent], options[:orientation])) unless (options[:agent].downcase == :random)
       driver
     end
 
@@ -32,12 +33,12 @@ module Webdriver
     end
 
     def self.resolution_for device_name, orientation
-      device = devices[downcase_sym device_name][downcase_sym orientation]
+      device = devices[device_name.downcase][orientation.downcase]
       [device[:width],device[:height]]
     end
 
     def self.agent_string_for device
-      user_agent_string = downcase_sym(device) == :random ? random_user_agent : devices[downcase_sym device][:user_agent]
+      user_agent_string = device.downcase == :random ? random_user_agent : devices[device.downcase][:user_agent]
       raise "Unsupported user agent: '#{options[:agent]}'." unless user_agent_string
       user_agent_string 
     end 
@@ -51,10 +52,6 @@ module Webdriver
         driver.switch_to.window driver.window_handles.first
       end
       driver.execute_script("window.innerWidth = #{width}; window.innerHeight = #{height};")
-    end
-
-    def self.downcase_sym sym
-      sym.to_s.downcase.to_sym #to support ruby 1.8.x
     end
 
     def self.random_user_agent
