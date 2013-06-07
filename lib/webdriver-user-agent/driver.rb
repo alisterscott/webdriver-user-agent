@@ -3,25 +3,12 @@ module Webdriver
     class Driver
       include Singleton
       
-      def for(options)
-        options[:browser] ||= :firefox
-        options[:agent] ||= :iphone
-        options[:orientation] ||= :portrait
+      def for(opts)
+        user_agent_string = agent_string_for opts[:agent]
+        options = BrowserOptions.new(opts, user_agent_string)
 
-        user_agent_string = agent_string_for options[:agent]
-
-        case options[:browser]
-        when :firefox
-          options[:profile] ||= Selenium::WebDriver::Firefox::Profile.new
-          options[:profile]['general.useragent.override'] = user_agent_string
-        when :chrome
-          options[:switches] ||= []
-          options[:switches] << "--user-agent=#{user_agent_string}"
-        else
-          raise "WebDriver UserAgent currently only supports :firefox and :chrome."
-        end
-        driver = Selenium::WebDriver.for options[:browser], options.except(:browser, :agent, :orientation)
-        resize_inner_window(driver, *resolution_for(options[:agent], options[:orientation])) unless (options[:agent].downcase == :random)
+        driver = Selenium::WebDriver.for options.browser, options.browser_options
+        resize_inner_window(driver, *resolution_for(options.agent, options.orientation)) unless (options.agent.downcase == :random)
         driver
       end
 
@@ -35,8 +22,9 @@ module Webdriver
         [device[:width],device[:height]]
       end
 
-      def agent_string_for device
-        user_agent_string = device.downcase == :random ? random_user_agent : devices[device.downcase][:user_agent]
+      def agent_string_for(device)
+        device = (device ? device.downcase : :iphone)
+        user_agent_string = device == :random ? random_user_agent : devices[device][:user_agent]
         raise "Unsupported user agent: '#{options[:agent]}'." unless user_agent_string
         user_agent_string 
       end

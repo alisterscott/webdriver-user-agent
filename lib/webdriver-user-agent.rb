@@ -3,6 +3,7 @@ require 'facets/hash/except'
 require 'yaml'
 require 'json'
 require 'webdriver-user-agent/core_ext/symbol'
+require 'webdriver-user-agent/browser_options'
 require 'webdriver-user-agent/driver'
 
 module Webdriver
