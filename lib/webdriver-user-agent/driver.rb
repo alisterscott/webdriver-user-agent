@@ -26,7 +26,7 @@ module Webdriver
       end
 
       def devices
-        @devices ||= YAML.load_file File.expand_path("../../device-info/devices.yaml", __FILE__)
+        YAML.load_file File.expand_path("../../device-info/devices.yaml", __FILE__)
       end
 
 
