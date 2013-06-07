@@ -2,7 +2,7 @@ require 'selenium-webdriver'
 require 'facets/hash/except'
 require 'yaml'
 require 'json'
-require 'core_ext/symbol'
+require 'webdriver-user-agent/core_ext/symbol'
 
 module Webdriver
   module UserAgent
