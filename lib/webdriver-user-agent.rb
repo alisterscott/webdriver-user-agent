@@ -11,7 +11,7 @@ module Webdriver
     end
 
     def self.resolution_for device_name, orientation
-      Device.instance.resolution_for device_name, orientation
+      Driver.instance.resolution_for device_name, orientation
     end
 
     def self.agent_string_for device
