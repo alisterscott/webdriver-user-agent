@@ -14,7 +14,7 @@ module Webdriver
         m = args.first
         value = options[m]
         super unless value
-        value
+        value.downcase
       end
 
       def browser_options
