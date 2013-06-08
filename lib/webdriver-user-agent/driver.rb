@@ -1,13 +1,14 @@
-require 'yaml'
 require 'json'
 require 'selenium-webdriver'
 require 'facets/hash/except'
 require 'webdriver-user-agent/browser_options'
+require 'webdriver-user-agent/devices'
 
 module Webdriver
   module UserAgent
     class Driver
       include Singleton
+      include Devices
 
       def for(opts)
         user_agent_string = agent_string_for opts[:agent]
@@ -15,30 +16,7 @@ module Webdriver
         build_driver_using options
       end
 
-      def devices
-        YAML.load_file devices_file
-      end
-
-
-      def resolution_for(device_name, orientation)
-        device = devices[device_name.downcase][orientation.downcase]
-        [device[:width],device[:height]]
-      end
-
-      def agent_string_for(device)
-        device = (device ? device.downcase : :iphone)
-        user_agent_string = (device == :random ? random_user_agent : devices[device][:user_agent])
-        raise "Unsupported user agent: '#{device}'." unless user_agent_string
-        user_agent_string
-      end
-
       private
-
-      def random_user_agent
-        File.foreach(user_agents_file).each_with_index.reduce(nil) do |picked,pair|
-          rand < 1.0/(1+pair[1]) ? pair[0] : picked
-        end
-      end
 
       def resize_inner_window(driver, width, height)
         if driver.browser == :firefox or :chrome
@@ -57,13 +35,6 @@ module Webdriver
         driver
       end
 
-      def user_agents_file
-        File.expand_path("../../device-info/user_agents.txt", __FILE__)
-      end
-
-      def devices_file
-        File.expand_path("../../device-info/devices.yaml", __FILE__)
-      end
     end
   end
 end
