@@ -1,3 +1,10 @@
+require 'yaml'
+require 'json'
+require 'selenium-webdriver'
+require 'facets/hash/except'
+require 'webdriver-user-agent/core_ext/symbol'
+require 'webdriver-user-agent/browser_options'
+
 module Webdriver
   module UserAgent
     class Driver
