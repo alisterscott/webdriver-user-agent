@@ -1,6 +1,5 @@
 require 'json'
 require 'selenium-webdriver'
-require 'facets/hash/except'
 require 'webdriver-user-agent/browser_options'
 require 'webdriver-user-agent/devices'
 

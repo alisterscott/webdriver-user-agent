@@ -1,3 +1,5 @@
+require 'facets/hash/except'
+
 module Webdriver
   module UserAgent
     class BrowserOptions
