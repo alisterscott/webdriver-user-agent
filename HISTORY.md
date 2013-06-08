@@ -1,5 +1,13 @@
 # Gem History
 
+## 7.0 - 8 June 2013
+
+* Withdraw deprecation
+
+## 6.6.6 - 15 March 2013
+
+* Announce deprecation
+
 ## 0.2.2 - 15 March 2013
 
 * Updated iPad user agent

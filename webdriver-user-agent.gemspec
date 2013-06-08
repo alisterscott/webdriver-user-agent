@@ -1,8 +1,8 @@
 # -*- encoding: utf-8 -*-
 
 Gem::Specification.new do |gem|
-  gem.authors       = ["Alister Scott"]
-  gem.email         = ["alister.scott@gmail.com"]
+  gem.authors       = ["Alister Scott", "Jeff Morgan"]
+  gem.email         = ["alister.scott@gmail.com", "jeff.morgan@leandog.com"]
   gem.description   = %q{A helper gem to emulate populate device user agents and resolutions when using webdriver}
   gem.summary       = %q{A helper gem to emulate populate device user agents and resolutions when using webdriver}
   gem.homepage      = "https://github.com/alisterscott/webdriver-user-agent"
@@ -12,7 +12,7 @@ Gem::Specification.new do |gem|
   gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
   gem.name          = "webdriver-user-agent"
   gem.require_paths = ["lib"]
-  gem.version       = "6.6.6"
+  gem.version       = "7.0"
   gem.add_dependency 'selenium-webdriver'
   gem.add_dependency 'facets'
   gem.add_dependency 'json'
