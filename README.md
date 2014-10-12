@@ -39,7 +39,7 @@ provides a UserAgent.driver method to return a new web-driver with user agent an
 
 	require 'selenium-webdriver'
 	require 'webdriver-user-agent'
-	driver = UserAgent.driver(:browser => :chrome, :agent => :iphone, :orientation => :landscape)
+	driver = WebDriver::UserAgent.driver(:browser => :chrome, :agent => :iphone, :orientation => :landscape)
 	driver.get 'http://tiffany.com'
 	driver.current_url.should == 'http://m.tiffany.com/International.aspx'
 
@@ -47,7 +47,7 @@ provides a UserAgent.driver method to return a new web-driver with user agent an
 
 	require 'selenium-webdriber'
 	require 'webdriver-user-agent'
-	driver = UserAgent.driver(:agent => :random)
+	driver = WebDriver::UserAgent.driver(:agent => :random)
 	driver.execute_script('return navigator.userAgent')
 	# random agent like "Mozilla/5.0 (Windows; U; Windows NT 5.0; en-US; rv:0.9.2) Gecko/20010726 Netscape6/6.1"
 
