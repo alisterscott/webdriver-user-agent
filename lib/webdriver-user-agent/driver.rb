@@ -10,7 +10,8 @@ module Webdriver
       include Devices
 
       def for(opts)
-        user_agent_string = agent_string_for opts[:agent]
+        user_agent_string   = opts[:user_agent_string]
+        user_agent_string ||= agent_string_for opts[:agent]
         options = BrowserOptions.new(opts, user_agent_string)
         build_driver_using options
       end

@@ -77,6 +77,15 @@ describe "webdriver user agent" do
     expect(@driver.execute_script('return window.innerHeight')).to eq(559)
     expect(@driver.title).to eq('hello')
   end
+  
+  it "can create a new webdriver driver using firefox and user-specified user agent" do
+   @driver = Webdriver::UserAgent.driver(:user_agent_string => "Mozilla/4.0 (compatible; MSIE 5.5b1; Mac_PowerPC)")
+   expect(@driver.browser).to eq(:firefox)
+   expect(@driver.execute_script('return navigator.userAgent')).not_to be_nil
+   
+   @browser = Watir::Browser.new @driver
+   expect(@browser.url).to eq("about:blank") 
+ end
 
   it "can allow using selenium driver for watir browser" do
     @driver = Webdriver::UserAgent.driver(:browser => :firefox, :agent => :iphone, :orientation => :portrait)
