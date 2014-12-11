@@ -15,8 +15,16 @@ describe "webdriver user agent" do
   	@driver = Webdriver::UserAgent.driver
   	@driver.browser.should == :firefox
   	@driver.execute_script('return navigator.userAgent').should include 'iPhone'
-  	@driver.execute_script('return window.innerWidth').should == 320 
-  	@driver.execute_script('return window.innerHeight').should == 356
+  	@driver.execute_script('return window.innerWidth').should == 375 
+  	@driver.execute_script('return window.innerHeight').should == 559
+  end
+
+  it "can create a new webdriver driver using chrome and iphone 6 plus (landscape)" do
+  	@driver = Webdriver::UserAgent.driver(:browser => :chrome, :agent => :iphone6plus, :orientation => :landscape)
+  	@driver.browser.should == :chrome
+  	@driver.execute_script('return navigator.userAgent').should include 'iPhone'
+  	@driver.execute_script('return window.innerWidth').should == 736 
+  	@driver.execute_script('return window.innerHeight').should == 414
   end
 
   it "can create a new webdriver driver using chrome and iPad (landscape)" do
@@ -65,8 +73,8 @@ describe "webdriver user agent" do
     @driver = Webdriver::UserAgent.driver(:browser => :firefox, :profile => profile)
     @driver.browser.should == :firefox
     @driver.execute_script('return navigator.userAgent').should include 'iPhone'
-    @driver.execute_script('return window.innerWidth').should == 320 
-    @driver.execute_script('return window.innerHeight').should == 356
+    @driver.execute_script('return window.innerWidth').should == 375 
+    @driver.execute_script('return window.innerHeight').should == 559
     @driver.title.should == 'hello'
   end
 

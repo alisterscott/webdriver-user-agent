@@ -1,5 +1,37 @@
 :iphone:
-  :user_agent: "Mozilla/5.0 (iPhone; U; CPU iPhone OS 4_3_2 like Mac OS X; en-us) AppleWebKit/533.17.9 (KHTML, like Gecko) Version/5.0.2 Mobile/8H7 Safari/6533.18.5"
+   :user_agent: "Mozilla/5.0 (iPhone; CPU iPhone OS 8_1_1 like Mac OS X) AppleWebKit/600.1.4 (KHTML, like Gecko) Version/8.0 Mobile/12B435 Safari/600.1.4"
+   :portrait:
+     :width: 375
+     :height: 559
+   :landscape:
+     :width: 667
+     :height: 375
+:iphone6plus:
+  :user_agent: "Mozilla/5.0 (iPhone; CPU iPhone OS 8_1_1 like Mac OS X) AppleWebKit/600.1.4 (KHTML, like Gecko) Version/8.0 Mobile/12B435 Safari/600.1.4"
+  :portrait:
+    :width: 414
+    :height: 628
+  :landscape:
+    :width: 736
+    :height: 414
+:iphone6:
+  :user_agent: "Mozilla/5.0 (iPhone; CPU iPhone OS 8_1_1 like Mac OS X) AppleWebKit/600.1.4 (KHTML, like Gecko) Version/8.0 Mobile/12B435 Safari/600.1.4"
+  :portrait:
+    :width: 375
+    :height: 559
+  :landscape:
+    :width: 667
+    :height: 375
+:iphone5s:
+  :user_agent: "Mozilla/5.0 (iPhone; CPU iPhone OS 8_1_1 like Mac OS X) AppleWebKit/600.1.4 (KHTML, like Gecko) Version/8.0 Mobile/12B435 Safari/600.1.4"
+  :portrait:
+    :width: 320
+    :height: 460
+  :landscape:
+    :width: 568
+    :height: 212
+:iphone4s:
+  :user_agent: "Mozilla/5.0 (iPhone; CPU iPhone OS 8_1_1 like Mac OS X) AppleWebKit/600.1.4 (KHTML, like Gecko) Version/8.0 Mobile/12B435 Safari/600.1.4"
   :portrait:
     :width: 320
     :height: 356
