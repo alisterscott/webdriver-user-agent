@@ -32,7 +32,7 @@ describe "webdriver user agent" do
   	expect(@driver.browser).to eq(:chrome)
   	expect(@driver.execute_script('return navigator.userAgent')).to include 'iPad'
   	expect(@driver.execute_script('return window.innerWidth')).to eq(1024) 
-  	expect(@driver.execute_script('return window.innerHeight')).to eq(690)
+  	expect(@driver.execute_script('return window.innerHeight')).to eq(704)
   end
   
   it "can create a new webdriver driver using firefox and android phone (landscape)" do
