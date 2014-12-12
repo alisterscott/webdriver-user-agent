@@ -1,3 +1,8 @@
+=== Version 7.2 / 2014-12-12
+* Enhancements
+  * Added iphone 5 and 6 variants (Thanks samnissen)
+  * Added ability to pass options user agent (Thanks samnissen)
+
 === Version 7.1 / 2014-3-2
 * Enhancements
   * Added ipad 7 device support (Thanks Matthwe Fleeger)
