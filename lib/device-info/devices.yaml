@@ -38,22 +38,14 @@
   :landscape:
     :width: 480
     :height: 196
-:ipad_seven:
-  :user_agent: "Mozilla/5.0 (iPad; CPU OS 6_1_3 like Mac OS X) AppleWebKit/536.26 (KHTML, like Gecko) Version/6.0 Mobile/10B329 Safari/8536.25"
-  :portrait:
-    :width: 768
-    :height: 946
-  :landscape:
-    :width: 1024
-    :height: 690
 :ipad:
-  :user_agent: "Mozilla/5.0(iPad; U; CPU OS 5_0 like Mac OS X; en-us) AppleWebKit/534.46 (KHTML, like Gecko) Version/5.1 Mobile/9A334 Safari/7534.48.3"
+  :user_agent: "Mozilla/5.0(iPad; U; CPU OS 8_1_1 like Mac OS X) AppleWebKit/600.14 (KHTML, like Gecko) Version/8.0 Mobile/12B435 Safari/9537.53"
   :portrait:
     :width: 768
-    :height: 946
+    :height: 960
   :landscape:
     :width: 1024
-    :height: 690
+    :height: 704
 :android_phone:
   :user_agent: "Mozilla/5.0 (Linux; U; Android 4.0.1; en-us; sdk Build/ICS_MR0) AppleWebKit/534.30 (KHTML, like Gecko) Version/4.0 Mobile Safari/534.30"
   :portrait:

@@ -20,7 +20,7 @@ module Webdriver
       end
 
       def browser_options
-        options.except(:browser, :agent, :orientation)
+        options.except(:browser, :agent, :orientation, :user_agent_string)
       end
 
       private
