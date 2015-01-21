@@ -8,7 +8,9 @@ module Webdriver
         YAML.load_file devices_file
       end
 
-      def resolution_for(device_name, orientation)
+      def resolution_for(device_name, orientation, user_width, user_height)
+        return [user_width.to_i, user_height.to_i] if ((user_width.to_i + user_height.to_i) > 1)
+        
         device = devices[device_name.downcase][orientation.downcase]
         [device[:width],device[:height]]
       end
