@@ -92,14 +92,11 @@ describe "webdriver user agent" do
     height = 600
     
    @driver = Webdriver::UserAgent.driver(:viewport_width => "#{width}", :viewport_height => height, :agent => :iphone6)
-   expect(@driver.execute_script('return window.innerWidth')).to eq(800) 
+   expect(@driver.execute_script('return window.innerWidth')).to eq(800)
    expect(@driver.execute_script('return window.innerHeight')).to eq(600)
    
-   expect(@driver.browser).to eq(:firefox)
-   expect(@driver.execute_script('return navigator.userAgent')).not_to be_nil
-   
    @browser = Watir::Browser.new @driver
-   expect(@browser.url).to eq("about:blank") 
+   expect(@browser.url).to eq("about:blank")
  end
 
   it "can allow using selenium driver for watir browser" do
