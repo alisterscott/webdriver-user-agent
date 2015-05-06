@@ -10,7 +10,6 @@ module Webdriver
       include Devices
 
       def for(opts)
-        puts "opts are #{opts}"
         user_agent_string   = opts[:user_agent_string]
         user_agent_string ||= agent_string_for opts[:agent]
         options = BrowserOptions.new(opts, user_agent_string)
@@ -25,11 +24,12 @@ module Webdriver
           driver.close
           driver.switch_to.window driver.window_handles.first
         end
-        driver.execute_script("window.innerWidth = #{width}; window.innerHeight = #{height};")
+        target_size = Selenium::WebDriver::Dimension.new(width.to_i, height.to_i)
+        driver.manage.window.size = target_size
       end
 
       def build_driver_using(options)
-        puts "options are #{options.inspect} in build_driver_using"
+        puts "#{options.browser} #{options.browser_options}"
         driver = Selenium::WebDriver.for options.browser, options.browser_options
         unless options.agent == :random
           resize_inner_window(driver, *resolution_for(options.agent, options.orientation, options.viewport_width, options.viewport_height))
