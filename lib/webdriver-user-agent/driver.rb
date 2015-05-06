@@ -29,7 +29,6 @@ module Webdriver
       end
 
       def build_driver_using(options)
-        puts "#{options.browser} #{options.browser_options}"
         driver = Selenium::WebDriver.for options.browser, options.browser_options
         unless options.agent == :random
           resize_inner_window(driver, *resolution_for(options.agent, options.orientation, options.viewport_width, options.viewport_height))
