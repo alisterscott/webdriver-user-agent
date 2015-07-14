@@ -56,12 +56,12 @@ describe "webdriver user agent" do
     
   end
 
-  it "can create a new webdriver driver using firefox and android tablet (portrait)" do
+  it "can create a new webdriver driver using chrome and android tablet (portrait)" do
     @driver = Webdriver::UserAgent.driver(:browser => :chrome, :agent => :android_tablet, :orientation => :portrait)
     expect(@driver.browser).to eq(:chrome)
     expect(@driver.execute_script('return navigator.userAgent')).to include 'Android'
     expect(@driver.execute_script('return Math.max(document.documentElement.clientWidth, window.innerWidth || 0)')).to eq(768)
-    expect(@driver.execute_script('return Math.max(document.documentElement.clientHeight, window.innerHeight || 0)')).to eq(946 - CHROMEBROWSER_UICHROME_HEIGHT)
+    expect(@driver.execute_script('return Math.max(document.documentElement.clientHeight, window.innerHeight || 0)')).to eq(873 - CHROMEBROWSER_UICHROME_HEIGHT)
   end
 
    it "can create a new webdriver driver using firefox and random user agent" do
