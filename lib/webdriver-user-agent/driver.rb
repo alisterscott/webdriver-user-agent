@@ -24,13 +24,14 @@ module Webdriver
           driver.close
           driver.switch_to.window driver.window_handles.first
         end
-        driver.execute_script("window.innerWidth = #{width}; window.innerHeight = #{height};")
+        target_size = Selenium::WebDriver::Dimension.new(width.to_i, height.to_i)
+        driver.manage.window.size = target_size
       end
 
       def build_driver_using(options)
         driver = Selenium::WebDriver.for options.browser, options.browser_options
         unless options.agent == :random
-          resize_inner_window(driver, *resolution_for(options.agent, options.orientation))
+          resize_inner_window(driver, *resolution_for(options.agent, options.orientation, options.viewport_width, options.viewport_height))
         end
         driver
       end

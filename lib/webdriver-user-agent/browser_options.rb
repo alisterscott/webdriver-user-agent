@@ -9,6 +9,9 @@ module Webdriver
         options[:browser] ||= :firefox
         options[:agent] ||= :iphone
         options[:orientation] ||= :portrait
+        
+        options[:viewport_width], options[:viewport_height] = parse_viewport_sizes(options[:viewport_width], options[:viewport_height])
+        
         initialize_for_browser(user_agent_string)
       end
 
@@ -20,7 +23,7 @@ module Webdriver
       end
 
       def browser_options
-        options.except(:browser, :agent, :orientation, :user_agent_string)
+        options.except(:browser, :agent, :orientation, :user_agent_string, :viewport_width, :viewport_height)
       end
 
       private
@@ -41,6 +44,12 @@ module Webdriver
           raise "WebDriver UserAgent currently only supports :firefox and :chrome."
         end
         
+      end
+      
+      def parse_viewport_sizes(width, height)
+        return ["0","0"] unless "#{width}".to_i > 0 && "#{height}".to_i > 0
+        
+        ["#{width}", "#{height}"]
       end
     end
   end
