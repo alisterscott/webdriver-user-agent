@@ -81,7 +81,7 @@ describe "webdriver user agent" do
 
   end
 
-  it "can create a new webdriver driver using firefox and android tablet (portrait)" do
+  it "can create a new webdriver driver using chrome and android tablet (portrait)" do
     @driver = Webdriver::UserAgent.driver(:browser => :chrome, :agent => :android_tablet, :orientation => :portrait)
     expect(@driver.browser).to eq(:chrome)
     expect(@driver.execute_script('return navigator.userAgent')).to include 'Android'
