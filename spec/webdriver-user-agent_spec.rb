@@ -86,7 +86,7 @@ describe "webdriver user agent" do
     expect(@driver.browser).to eq(:chrome)
     expect(@driver.execute_script('return navigator.userAgent')).to include 'Android'
     expect(@driver.execute_script('return Math.max(document.documentElement.clientWidth, window.innerWidth || 0)')).to eq(768)
-    expect(@driver.execute_script('return Math.max(document.documentElement.clientHeight, window.innerHeight || 0)')).to eq(946 - CHROMEBROWSER_UICHROME_HEIGHT)
+    expect(@driver.execute_script('return Math.max(document.documentElement.clientHeight, window.innerHeight || 0)')).to eq(873 - CHROMEBROWSER_UICHROME_HEIGHT)
   end
 
   it "can create a new webdriver driver using firefox and desktop (landscape)" do
