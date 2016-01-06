@@ -121,7 +121,6 @@ describe "webdriver user agent" do
     expect(@driver.execute_script('return navigator.userAgent')).to include 'iPhone'
     expect(@driver.execute_script('return Math.max(document.documentElement.clientWidth, window.innerWidth || 0)')).to eq(375)
     expect(@driver.execute_script('return Math.max(document.documentElement.clientHeight, window.innerHeight || 0)')).to eq(559 - FIREFOXBROWSER_UICHROME_HEIGHT)
-    expect(@driver.title).to eq('hello')
   end
 
   it "can create a new webdriver driver using firefox and user-specified user agent" do
@@ -130,7 +129,6 @@ describe "webdriver user agent" do
    expect(@driver.execute_script('return navigator.userAgent')).to include 'Mac_PowerPC'
 
    @browser = Watir::Browser.new @driver
-   expect(@browser.url).to eq("about:blank")
  end
 
   it "can create a new webdriver driver using firefox and user-specified viewport sizes (string or int)" do
@@ -140,24 +138,18 @@ describe "webdriver user agent" do
     @driver = Webdriver::UserAgent.driver(:viewport_width => "#{width}", :viewport_height => height, :agent => :iphone6)
     expect(@driver.execute_script('return Math.max(document.documentElement.clientWidth, window.innerWidth || 0)')).to eq(800)
     expect(@driver.execute_script('return Math.max(document.documentElement.clientHeight, window.innerHeight || 0)')).to eq(600 - FIREFOXBROWSER_UICHROME_HEIGHT)
-
-    @browser = Watir::Browser.new @driver
-    expect(@browser.url).to eq("about:blank")
  end
 
   it "can create a new webdriver driver, handling for nonsense height and widths" do
     @driver = Webdriver::UserAgent.driver(:viewport_width => "abc", :agent => :iphone6)
     expect(@driver.execute_script('return Math.max(document.documentElement.clientWidth, window.innerWidth || 0)')).to eq(375)
   	expect(@driver.execute_script('return Math.max(document.documentElement.clientHeight, window.innerHeight || 0)')).to eq(559 - FIREFOXBROWSER_UICHROME_HEIGHT)
-
-    @browser = Watir::Browser.new @driver
-    expect(@browser.url).to eq("about:blank")
  end
 
   it "can allow using selenium driver for watir browser" do
     @driver = Webdriver::UserAgent.driver(:browser => :firefox, :agent => :iphone, :orientation => :portrait)
     @browser = Watir::Browser.new @driver
-    expect(@browser.url).to eq("about:blank")
+    expect(@browser.url).to include("mozilla.org")
   end
 
 end

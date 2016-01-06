@@ -12,7 +12,7 @@ Gem::Specification.new do |gem|
   gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
   gem.name          = "webdriver-user-agent"
   gem.require_paths = ["lib"]
-  gem.version       = "7.3"
+  gem.version       = "7.4"
   gem.requirements << 'chromedriver, v2.20'
   # chromedriver v2.19 causes
     # Selenium::WebDriver::Error::NoSuchDriverError: no such session errors
