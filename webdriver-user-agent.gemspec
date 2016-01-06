@@ -13,6 +13,9 @@ Gem::Specification.new do |gem|
   gem.name          = "webdriver-user-agent"
   gem.require_paths = ["lib"]
   gem.version       = "7.3"
+  gem.requirements << 'chromedriver, v2.20'
+  # chromedriver v2.19 causes
+    # Selenium::WebDriver::Error::NoSuchDriverError: no such session errors
   gem.add_dependency 'selenium-webdriver'
   gem.add_dependency 'facets'
   gem.add_dependency 'json'
