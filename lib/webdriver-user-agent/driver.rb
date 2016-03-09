@@ -19,11 +19,9 @@ module Webdriver
       private
 
       def resize_inner_window(driver, width, height)
-        if driver.browser == :firefox or :chrome
-          driver.execute_script("window.open(#{driver.current_url.to_json},'_blank');")
-          driver.close
-          driver.switch_to.window driver.window_handles.first
-        end
+        driver.execute_script("window.open(#{driver.current_url.to_json},'_blank');")
+        driver.close
+        driver.switch_to.window driver.window_handles.first
         target_size = Selenium::WebDriver::Dimension.new(width.to_i, height.to_i)
         driver.manage.window.size = target_size
       end
