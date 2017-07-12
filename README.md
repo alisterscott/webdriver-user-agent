@@ -25,6 +25,7 @@ provides a UserAgent.driver method to return a new web-driver with user agent an
 * :browser
 	* :firefox (default)
 	* :chrome
+  * :safari
 * :agent
 	* :iphone (default)
 	* :ipad

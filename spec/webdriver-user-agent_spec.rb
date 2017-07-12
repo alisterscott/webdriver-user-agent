@@ -4,11 +4,12 @@ $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
 $LOAD_PATH.unshift(File.dirname(__FILE__))
 require 'webdriver-user-agent'
 require 'selenium-webdriver'
-require 'watir-webdriver'
+require 'watir'
 
 CHROMEBROWSER_UICHROME_HEIGHT   = 72
 CHROMEBROWSER_UI_MINIMUM_HEIGHT = 200
 FIREFOXBROWSER_UICHROME_HEIGHT  = 79
+SAFARIBROWSER_UICHROME_HEIGHT   = 38
 
 describe "webdriver user agent" do
   after :each do
@@ -26,6 +27,15 @@ describe "webdriver user agent" do
   	expect(@driver.execute_script('return navigator.userAgent')).to include 'iPhone'
   	expect(@driver.execute_script('return Math.max(document.documentElement.clientWidth, window.innerWidth || 0)')).to eq(375)
   	expect(@driver.execute_script('return Math.max(document.documentElement.clientHeight, window.innerHeight || 0)')).to eq(559 - FIREFOXBROWSER_UICHROME_HEIGHT)
+  end
+
+  it "can create a new webdriver driver using safari and iphone 6 plus, and landscape" do
+  	@driver = Webdriver::UserAgent.driver(:browser => :safari, :agent => :iphone6plus, :orientation => :landscape)
+  	expect(@driver.browser).to eq(:safari)
+
+  	expect(@driver.execute_script('return navigator.userAgent')).to include 'iPhone'
+  	expect(@driver.execute_script('return Math.max(document.documentElement.clientWidth, window.innerWidth || 0)')).to eq(736)
+  	expect(@driver.execute_script('return Math.max(document.documentElement.clientHeight, window.innerHeight || 0)')).to eq(414 - SAFARIBROWSER_UICHROME_HEIGHT)
   end
 
   it "can create a new webdriver driver using chrome and iphone 6 plus (landscape)" do

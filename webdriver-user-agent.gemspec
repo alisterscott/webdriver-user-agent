@@ -16,10 +16,11 @@ Gem::Specification.new do |gem|
   gem.requirements << 'chromedriver, v2.20'
   # chromedriver v2.19 causes
     # Selenium::WebDriver::Error::NoSuchDriverError: no such session errors
-  gem.add_dependency 'selenium-webdriver'
+  gem.add_dependency 'selenium-webdriver', '>= 3.4.0'
+  gem.add_dependency 'os'
   gem.add_dependency 'facets'
   gem.add_dependency 'json'
   gem.add_dependency 'psych'
   gem.add_development_dependency 'rspec'
-  gem.add_development_dependency 'watir-webdriver'
+  gem.add_development_dependency 'watir'
 end
