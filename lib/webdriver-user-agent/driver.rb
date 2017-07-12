@@ -32,7 +32,6 @@ module Webdriver
         target_size = Selenium::WebDriver::Dimension.new(width.to_i, height.to_i)
 
         case driver.browser
-        when :firefox || :chrome
         when :safari
           # The other resizing windows method does not work for Safari
           # and I'm unsure what the purpose of opening the second window is.
