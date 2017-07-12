@@ -52,9 +52,9 @@ provides a UserAgent.driver method to return a new web-driver with user agent an
 	driver.execute_script('return navigator.userAgent')
 	# random agent like "Mozilla/5.0 (Windows; U; Windows NT 5.0; en-US; rv:0.9.2) Gecko/20010726 Netscape6/6.1"
 
-### Example using watir-webdriver
+### Example using watir
 
-	require 'watir-webdriver'
+	require 'watir'
 	require 'webdriver-user-agent'
 	driver = Webdriver::UserAgent.driver(:browser => :chrome, :agent => :iphone, :orientation => :landscape)
 	browser = Watir::Browser.new(driver)
