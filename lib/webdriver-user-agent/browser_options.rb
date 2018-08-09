@@ -12,6 +12,7 @@ module Webdriver
         options[:browser] ||= :firefox
         options[:agent] ||= :iphone
         options[:orientation] ||= :portrait
+        set_preview_option(options[:safari_technology_preview]) if (@options[:browser] == :safari)
 
         options[:viewport_width], options[:viewport_height] = parse_viewport_sizes(options[:viewport_width], options[:viewport_height])
 
@@ -35,14 +36,22 @@ module Webdriver
         @options ||= {}
       end
 
+      def set_preview_option(opt)
+        @stp = opt
+        @stp = false unless @stp.is_a?(TrueClass)
+      end
+
       def initialize_for_browser(user_agent_string)
         case options[:browser]
         when :firefox
-          options[:profile] ||= Selenium::WebDriver::Firefox::Profile.new
-          options[:profile]['general.useragent.override'] = user_agent_string
+          profile ||= Selenium::WebDriver::Firefox::Profile.new
+          profile['general.useragent.override'] = user_agent_string
+
+          options[:options] ||= Selenium::WebDriver::Firefox::Options.new
+          options[:options].profile = profile
         when :chrome
-          options[:switches] ||= []
-          options[:switches] << "--user-agent=#{user_agent_string}"
+          options[:options] ||= Selenium::WebDriver::Chrome::Options.new
+          options[:options].add_argument "--user-agent=#{user_agent_string}"
         when :safari
           change_safari_user_agent_string(user_agent_string)
           options
@@ -60,12 +69,13 @@ module Webdriver
       def change_safari_user_agent_string(user_agent_string)
         raise "Safari requires a Mac" unless OS.mac?
 
-        # Safari only works in technology preview, as of July 2017
-        # https://github.com/SeleniumHQ/selenium/issues/2904#issuecomment-261736814
-        Selenium::WebDriver::Safari.technology_preview!
-
         ua  = "\\\"#{user_agent_string}\\\"" # escape for shell quoting
-        cmd = "defaults write com.apple.SafariTechnologyPreview CustomUserAgent \"#{ua}\""
+        if @stp
+          Selenium::WebDriver::Safari.technology_preview!
+          cmd = "defaults write com.apple.SafariTechnologyPreview CustomUserAgent \"#{ua}\""
+        else
+          cmd = "defaults write com.apple.Safari CustomUserAgent \"#{ua}\""
+        end
         # Note that `com.apple.SafariTechnologyPreview` is the name specific
         # to the beta browser provided by Apple, which is required to use
         # Selenium with Safari, as of July 2017.
