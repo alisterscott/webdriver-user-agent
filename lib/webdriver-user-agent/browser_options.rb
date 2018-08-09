@@ -76,13 +76,6 @@ module Webdriver
         else
           cmd = "defaults write com.apple.Safari CustomUserAgent \"#{ua}\""
         end
-        # Note that `com.apple.SafariTechnologyPreview` is the name specific
-        # to the beta browser provided by Apple, which is required to use
-        # Selenium with Safari, as of July 2017.
-        # https://github.com/SeleniumHQ/selenium/issues/2904#issuecomment-261736814
-        # If this changes, and this gem is changed to support using the
-        # golden master Safari, the name of the configuration should be
-        # changed to `com.apple.Safari`
 
         output = `#{cmd}`
 
