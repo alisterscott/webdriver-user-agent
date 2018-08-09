@@ -11,44 +11,59 @@
      :width: 1366
      :height: 768
 :iphone_default: &iphone_default
-   :user_agent: "Mozilla/5.0 (iPhone; CPU iPhone OS 8_1_1 like Mac OS X) AppleWebKit/600.1.4 (KHTML, like Gecko) Version/8.0 Mobile/12B435 Safari/600.1.4"
+   :user_agent: "Mozilla/5.0 (iPhone; CPU iPhone OS 11_4 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/11.0 Mobile/15E148 Safari/604.1"
    :portrait:
      :width: 375
-     :height: 559
+     :height: 635
    :landscape:
-     :width: 667
+     :width: 724
      :height: 375
-:iphone:
+:iphone: &iphone
    <<: *iphone_default
+:iphonex:
+  <<: *iphone_default
+:iphone8plus: &iphone8plus
+  <<: *iphone_default
+  :portrait:
+    :width: 414
+    :height: 622
+  :landscape:
+    :width: 736
+    :height: 414
+:iphone8: &iphone8
+  <<: *iphone_default
+  :portrait:
+    :width: 375
+    :height: 553
+  :landscape:
+    :width: 667
+    :height: 375
+:iphone7plus:
+  <<: *iphone8plus
+:iphone7:
+  <<: *iphone8
+  :portrait:
 :iphone6splus:
-  <<: *iphone_default
-  :portrait:
-    :width: 414
-    :height: 628
-  :landscape:
-    :width: 736
-    :height: 414
+  <<: *iphone8plus
 :iphone6s:
-  <<: *iphone_default
+  <<: *iphone8
 :iphone6plus:
-  <<: *iphone_default
-  :portrait:
-    :width: 414
-    :height: 628
-  :landscape:
-    :width: 736
-    :height: 414
+  <<: *iphone8plus
 :iphone6:
-  <<: *iphone_default
-:iphone5s:
+  <<: *iphone8
+:iphone5s: &iphone5s
   <<: *iphone_default
   :portrait:
     :width: 320
-    :height: 460
+    :height: 454
   :landscape:
     :width: 568
-    :height: 212
-:iphone4s:
+    :height: 320
+:iphonese:
+  <<: *iphone5s
+:iphone5:
+  <<: *iphone5s
+:iphone4s: &iphone4s
   <<: *iphone_default
   :portrait:
     :width: 320
@@ -56,22 +71,44 @@
   :landscape:
     :width: 480
     :height: 196
-:ipad:
-  :user_agent: "Mozilla/5.0(iPad; U; CPU OS 8_1_1 like Mac OS X) AppleWebKit/600.14 (KHTML, like Gecko) Version/8.0 Mobile/12B435 Safari/600.1.4"
+:iphone4:
+  <<: *iphone4s
+:ipad: &ipad
+  :user_agent: "Mozilla/5.0 (iPad; CPU OS 11_4 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/11.0 Mobile/15E148 Safari/604.1"
   :portrait:
     :width: 768
-    :height: 960
+    :height: 954
   :landscape:
     :width: 1024
-    :height: 704
-:ipad_pro:
-  :user_agent: "Mozilla/5.0 (iPad; CPU OS 9_1 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13B137 Safari/601.1"
+    :height: 698
+:ipad_default:
+  <<: *ipad
+:ipad_pro: &ipad_pro
+  <<: *ipad
   :portrait:
     :width: 1024
-    :height: 1302
+    :height: 1296
   :landscape:
     :width: 1366
-    :height: 960
+    :height: 954
+:ipad_pro_12:
+  <<: *ipad_pro
+:ipad_pro_10:
+  <<: *ipad
+  :portrait:
+    :width: 834
+    :height: 1042
+  :landscape:
+    :width: 1112
+    :height: 764
+:ipad_pro_9:
+  <<: *ipad
+  :portrait:
+    :width: 768
+    :height: 954
+  :landscape:
+    :width: 1024
+    :height: 698
 :android_phone:
   :user_agent: "Mozilla/5.0 (Linux; U; Android 4.0.1; en-us; sdk Build/ICS_MR0) AppleWebKit/534.30 (KHTML, like Gecko) Version/4.0 Mobile Safari/534.30"
   :portrait:
