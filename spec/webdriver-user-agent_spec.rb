@@ -4,15 +4,18 @@ $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
 $LOAD_PATH.unshift(File.dirname(__FILE__))
 require 'webdriver-user-agent'
 require 'selenium-webdriver'
-require 'watir-webdriver'
+require 'watir'
 
-CHROMEBROWSER_UICHROME_HEIGHT   = 72
-CHROMEBROWSER_UI_MINIMUM_HEIGHT = 200
-FIREFOXBROWSER_UICHROME_HEIGHT  = 79
+CHROMEBROWSER_UICHROME_HEIGHT         = 114
+CHROMEBROWSER_UICHROME_HEIGHT_TALL    = 41
+CHROMEBROWSER_UI_MINIMUM_HEIGHT       = 158
+FIREFOXBROWSER_UICHROME_HEIGHT        = 74
+SAFARIBROWSER_UICHROME_HEIGHT         = 38
 
 describe "webdriver user agent" do
   after :each do
-    @driver.quit if @driver
+    @browser.close if @browser rescue nil
+    @driver.quit if @driver rescue nil
   end
 
   # window.innerWidth and window.innerHeight
@@ -25,7 +28,16 @@ describe "webdriver user agent" do
   	expect(@driver.browser).to eq(:firefox)
   	expect(@driver.execute_script('return navigator.userAgent')).to include 'iPhone'
   	expect(@driver.execute_script('return Math.max(document.documentElement.clientWidth, window.innerWidth || 0)')).to eq(375)
-  	expect(@driver.execute_script('return Math.max(document.documentElement.clientHeight, window.innerHeight || 0)')).to eq(559 - FIREFOXBROWSER_UICHROME_HEIGHT)
+  	expect(@driver.execute_script('return Math.max(document.documentElement.clientHeight, window.innerHeight || 0)')).to eq(635 - FIREFOXBROWSER_UICHROME_HEIGHT)
+  end
+
+  it "can create a new webdriver driver using safari and iphone 6 plus, and landscape" do
+  	@driver = Webdriver::UserAgent.driver(:browser => :safari, :agent => :iphone6plus, :orientation => :landscape)
+  	expect(@driver.browser).to eq(:safari)
+
+  	expect(@driver.execute_script('return navigator.userAgent')).to include 'iPhone'
+  	expect(@driver.execute_script('return Math.max(document.documentElement.clientWidth, window.innerWidth || 0)')).to eq(736)
+  	expect(@driver.execute_script('return Math.max(document.documentElement.clientHeight, window.innerHeight || 0)')).to eq(414 - SAFARIBROWSER_UICHROME_HEIGHT)
   end
 
   it "can create a new webdriver driver using chrome and iphone 6 plus (landscape)" do
@@ -37,16 +49,16 @@ describe "webdriver user agent" do
   end
 
   it "can create a new webdriver driver using chrome and iPad (landscape)" do
-  	@driver = Webdriver::UserAgent.driver(:browser => :chrome, :agent => :iPad, :orientation => :landscape)
+  	@driver = Webdriver::UserAgent.driver(:browser => :chrome, :agent => :ipad, :orientation => :landscape)
   	expect(@driver.browser).to eq(:chrome)
   	expect(@driver.execute_script('return navigator.userAgent')).to include 'iPad'
   	expect(@driver.execute_script('return Math.max(document.documentElement.clientWidth, window.innerWidth || 0)')).to eq(1024)
-  	expect(@driver.execute_script('return Math.max(document.documentElement.clientHeight, window.innerHeight || 0)')).to eq(704 - CHROMEBROWSER_UICHROME_HEIGHT)
+  	expect(@driver.execute_script('return Math.max(document.documentElement.clientHeight, window.innerHeight || 0)')).to eq(698 - CHROMEBROWSER_UICHROME_HEIGHT)
   end
 
   it "can create a new webdriver driver using chrome and iPad Pro (portrait)" do
     # Testing the height will fail if your monitor is not tall enough.
-    # For instance, a 15" MacBook Pro cannot be.
+    # For instance, a 15" MacBook Pro at default scaled resolution cannot be.
     # This will determine if your monitor is tall enough.
     # Optionally, you can override with an environment variable:
     # `I_HAVE_A_TALL_MONITOR=true rspec spec/this_file.rb`
@@ -86,7 +98,7 @@ describe "webdriver user agent" do
     expect(@driver.browser).to eq(:chrome)
     expect(@driver.execute_script('return navigator.userAgent')).to include 'Android'
     expect(@driver.execute_script('return Math.max(document.documentElement.clientWidth, window.innerWidth || 0)')).to eq(768)
-    expect(@driver.execute_script('return Math.max(document.documentElement.clientHeight, window.innerHeight || 0)')).to eq(873 - CHROMEBROWSER_UICHROME_HEIGHT)
+    expect(@driver.execute_script('return Math.max(document.documentElement.clientHeight, window.innerHeight || 0)')).to eq(873 - CHROMEBROWSER_UICHROME_HEIGHT_TALL)
   end
 
   it "can create a new webdriver driver using firefox and desktop (landscape)" do
@@ -116,11 +128,14 @@ describe "webdriver user agent" do
   it "can create a new webdriver driver using an existing firefox profile" do
     profile = Selenium::WebDriver::Firefox::Profile.new
     profile['browser.startup.homepage'] = "data:text/html,<title>hello</title>"
-    @driver = Webdriver::UserAgent.driver(:browser => :firefox, :profile => profile)
+    options = Selenium::WebDriver::Firefox::Options.new
+    options.profile = profile
+    @driver = Webdriver::UserAgent.driver(:browser => :firefox, options: options)
+
     expect(@driver.browser).to eq(:firefox)
     expect(@driver.execute_script('return navigator.userAgent')).to include 'iPhone'
     expect(@driver.execute_script('return Math.max(document.documentElement.clientWidth, window.innerWidth || 0)')).to eq(375)
-    expect(@driver.execute_script('return Math.max(document.documentElement.clientHeight, window.innerHeight || 0)')).to eq(559 - FIREFOXBROWSER_UICHROME_HEIGHT)
+    expect(@driver.execute_script('return Math.max(document.documentElement.clientHeight, window.innerHeight || 0)')).to eq(635 - FIREFOXBROWSER_UICHROME_HEIGHT)
   end
 
   it "can create a new webdriver driver using firefox and user-specified user agent" do
@@ -141,15 +156,16 @@ describe "webdriver user agent" do
  end
 
   it "can create a new webdriver driver, handling for nonsense height and widths" do
-    @driver = Webdriver::UserAgent.driver(:viewport_width => "abc", :agent => :iphone6)
+    @driver = Webdriver::UserAgent.driver(:viewport_width => "abc", :agent => :iphone8)
     expect(@driver.execute_script('return Math.max(document.documentElement.clientWidth, window.innerWidth || 0)')).to eq(375)
-  	expect(@driver.execute_script('return Math.max(document.documentElement.clientHeight, window.innerHeight || 0)')).to eq(559 - FIREFOXBROWSER_UICHROME_HEIGHT)
+  	expect(@driver.execute_script('return Math.max(document.documentElement.clientHeight, window.innerHeight || 0)')).to eq(553 - FIREFOXBROWSER_UICHROME_HEIGHT)
  end
 
   it "can allow using selenium driver for watir browser" do
     @driver = Webdriver::UserAgent.driver(:browser => :firefox, :agent => :iphone, :orientation => :portrait)
     @browser = Watir::Browser.new @driver
-    expect(@browser.url).to include("mozilla.org")
+    expect(@browser).to be_a(Watir::Browser)
+    expect(@browser.url).to be_a(String)
   end
 
 end

@@ -1,4 +1,5 @@
 require 'json'
+require 'os'
 require 'selenium-webdriver'
 require 'webdriver-user-agent/browser_options'
 require 'webdriver-user-agent/devices'
@@ -14,18 +15,22 @@ module Webdriver
         user_agent_string ||= agent_string_for opts[:agent]
         options = BrowserOptions.new(opts, user_agent_string)
         build_driver_using options
+      ensure
+        if safari?(opts)
+          case
+          when opts[:safari_technology_preview].is_a?(TrueClass)
+            `defaults delete com.apple.SafariTechnologyPreview CustomUserAgent`
+          else
+            `defaults delete com.apple.Safari CustomUserAgent`
+          end
+        end
       end
 
       private
 
       def resize_inner_window(driver, width, height)
-        if driver.browser == :firefox or :chrome
-          driver.execute_script("window.open(#{driver.current_url.to_json},'_blank');")
-          driver.close
-          driver.switch_to.window driver.window_handles.first
-        end
         target_size = Selenium::WebDriver::Dimension.new(width.to_i, height.to_i)
-        driver.manage.window.size = target_size
+        driver.manage.window.resize_to target_size.width, target_size.height
       end
 
       def build_driver_using(options)
@@ -36,6 +41,9 @@ module Webdriver
         driver
       end
 
+      def safari?(o = {})
+        o[:browser] == :safari
+      end
     end
   end
 end
