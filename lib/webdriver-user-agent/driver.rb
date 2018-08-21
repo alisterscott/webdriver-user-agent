@@ -17,8 +17,8 @@ module Webdriver
         build_driver_using options
       ensure
         if safari?(opts)
-          case opts[:safari_technology_preview]
-          when true
+          case
+          when opts[:safari_technology_preview].is_a?(TrueClass)
             `defaults delete com.apple.SafariTechnologyPreview CustomUserAgent`
           else
             `defaults delete com.apple.Safari CustomUserAgent`

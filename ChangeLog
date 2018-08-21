@@ -1,3 +1,11 @@
+=== Version 7.5 / 2017-8-22
+* Enhancements
+  * Added support for modern iPhone and iPad sizes
+  * Added support for driving Safari and Safari Technology Preview
+  * Updated to use new Watir namespace
+  * Updated to Ruby 2.4.1
+  * Updated Chrome and Firefox options configuration to use new Selenium syntax
+
 === Version 7.4 / 2016-1-6
 * Enhancements
   * Added support for iPad Pro and iPhone 6/6s (Thanks samnissen)
@@ -17,4 +25,3 @@
 === Version 7.1 / 2014-3-2
 * Enhancements
   * Added ipad 7 device support (Thanks Matthwe Fleeger)
-
