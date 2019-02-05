@@ -20,8 +20,10 @@ module Webdriver
           case
           when opts[:safari_technology_preview].is_a?(TrueClass)
             `defaults delete com.apple.SafariTechnologyPreview CustomUserAgent`
+            `defaults delete com.apple.SafariTechnologyPreview AppleLanguages`
           else
             `defaults delete com.apple.Safari CustomUserAgent`
+            `defaults delete com.apple.Safari AppleLanguages`
           end
         end
       end

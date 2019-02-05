@@ -23,4 +23,5 @@ Gem::Specification.new do |gem|
   gem.add_dependency 'psych'
   gem.add_development_dependency 'rspec'
   gem.add_development_dependency 'watir'
+  gem.add_development_dependency 'webdrivers'
 end
