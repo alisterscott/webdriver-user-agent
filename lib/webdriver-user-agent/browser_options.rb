@@ -4,6 +4,9 @@ module Webdriver
   module UserAgent
 
     MINIMUM_MACOS_VERSION_NUMBER = 12
+    DEFAULT_BROWSER = :firefox
+    DEFAULT_AGENT = :iphone
+    DEFAULT_ORIENTATION = :portrait
 
     class BrowserOptions
 
@@ -16,7 +19,7 @@ module Webdriver
 
         options[:viewport_width], options[:viewport_height] = parse_viewport_sizes(options[:viewport_width], options[:viewport_height])
 
-        initialize_for_browser(user_agent_string)
+        initialize_for_browser(user_agent_string, opts[:accept_language_string])
       end
 
       def method_missing(*args, &block)
@@ -27,7 +30,7 @@ module Webdriver
       end
 
       def browser_options
-        options.except(:browser, :agent, :orientation, :user_agent_string, :viewport_width, :viewport_height)
+        options.except(:browser, :agent, :orientation, :user_agent_string, :accept_language_string, :viewport_width, :viewport_height, :safari_technology_preview)
       end
 
       private
@@ -41,19 +44,22 @@ module Webdriver
         @stp = false unless @stp.is_a?(TrueClass)
       end
 
-      def initialize_for_browser(user_agent_string)
+      def initialize_for_browser(user_agent_string, accept_language_string)
         case options[:browser]
         when :firefox
           profile ||= Selenium::WebDriver::Firefox::Profile.new
           profile['general.useragent.override'] = user_agent_string
+          profile['intl.accept_languages'] = accept_language_string if accept_language_string
 
           options[:options] ||= Selenium::WebDriver::Firefox::Options.new
           options[:options].profile = profile
         when :chrome
           options[:options] ||= Selenium::WebDriver::Chrome::Options.new
           options[:options].add_argument "--user-agent=#{user_agent_string}"
+          options[:options].add_preference("intl.accept_languages", accept_language_string) if accept_language_string
         when :safari
           change_safari_user_agent_string(user_agent_string)
+          change_safari_language(accept_language_string) if accept_language_string
           options
         else
           raise "WebDriver UserAgent currently only supports :chrome, :firefox and :safari."
@@ -67,23 +73,48 @@ module Webdriver
       end
 
       def change_safari_user_agent_string(user_agent_string)
+        ua  = "\"\\\"#{user_agent_string}\\\"\"" # escape for shell quoting
+
+        safari_command_runner(ua, "CustomUserAgent")
+      end
+
+      def change_safari_language(accept_language_string)
+        parsed_safari_string = prepare_safari_string(accept_language_string)
+
+        safari_command_runner(parsed_safari_string, "AppleLanguages")
+      end
+
+      def safari_command_runner(setting, pref)
         raise "Safari requires a Mac" unless OS.mac?
 
-        ua  = "\\\"#{user_agent_string}\\\"" # escape for shell quoting
-        if @stp
-          Selenium::WebDriver::Safari.technology_preview!
-          cmd = "defaults write com.apple.SafariTechnologyPreview CustomUserAgent \"#{ua}\""
-        else
-          cmd = "defaults write com.apple.Safari CustomUserAgent \"#{ua}\""
-        end
+        cmd = "defaults write com.apple.#{safari_version} #{pref} #{setting}"
 
         output = `#{cmd}`
 
+        raise prepare_safari_error_message(cmd, output) unless $?.success?
+      end
+
+      def safari_version
+        if @stp
+          Selenium::WebDriver::Safari.technology_preview!
+          return "SafariTechnologyPreview"
+        end
+
+        "Safari"
+      end
+
+      def prepare_safari_error_message(cmd, output)
         error_message  = "Unable to execute '#{cmd}'. "
         error_message += "Error message reported: '#{output}'"
         error_message += "Please execute the command manually and correct any errors."
 
-        raise error_message unless $?.success?
+        error_message
+      end
+
+      def prepare_safari_string(accept_language_string)
+        ["'(", accept_language_string.split(",").map{|l|
+          "\"#{l.gsub(/\s+/,'')}\""
+        }.join(", "), ")'"].join('')
       end
 
       # Require a Mac at version 12 (Sierra) or greater
