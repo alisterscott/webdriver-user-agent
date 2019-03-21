@@ -2,8 +2,12 @@
 # http://www.hobo-web.co.uk/best-screen-size/
 # https://en.wikipedia.org/wiki/Display_resolution#Common_display_resolutions
 # http://www.w3schools.com/browsers/browsers_display.asp
+# iPhone sizes added by running Simulator on macOS and visiting
+# https://viewportsizes.com/mine/
+# Note: It is correct that the iPhone XS Max 
+# and the iPhone XR do have the same viewport size.
 :desktop:
-   :user_agent: "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) AppleWebKit/600.8.9 (KHTML, like Gecko) Version/8.0.8 Safari/600.8.9"
+   :user_agent: "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_3) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/12.0.3 Safari/605.1.15"
    :portrait:
      :width: 768
      :height: 1024
@@ -11,17 +15,29 @@
      :width: 1366
      :height: 768
 :iphone_default: &iphone_default
-   :user_agent: "Mozilla/5.0 (iPhone; CPU iPhone OS 11_4 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/11.0 Mobile/15E148 Safari/604.1"
+   :user_agent: Mozilla/5.0 (iPhone; CPU iPhone OS 12_1_4 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/12.0 Mobile/15E148 Safari/604.1"
    :portrait:
-     :width: 375
-     :height: 635
+     :width: 414
+     :height: 719
    :landscape:
-     :width: 724
-     :height: 375
+     :width: 808
+     :height: 414
 :iphone: &iphone
    <<: *iphone_default
-:iphonex:
+:iphonexr:
   <<: *iphone_default
+:iphonexsmax:
+  <<: *iphone_default
+:iphonexs: &iphonexs
+  <<: *iphone_default
+  :portrait:
+    :width: 375
+    :height: 635
+  :landscape:
+    :width: 724
+    :height: 375
+:iphonex:
+  <<: *iphonexs
 :iphone8plus: &iphone8plus
   <<: *iphone_default
   :portrait:
