@@ -1,11 +1,18 @@
 # Desktop size sources
-# http://www.hobo-web.co.uk/best-screen-size/
-# https://en.wikipedia.org/wiki/Display_resolution#Common_display_resolutions
-# http://www.w3schools.com/browsers/browsers_display.asp
+# - http://www.hobo-web.co.uk/best-screen-size/
+# - https://en.wikipedia.org/wiki/Display_resolution#Common_display_resolutions
+# - http://www.w3schools.com/browsers/browsers_display.asp
+
 # iPhone sizes added by running Simulator on macOS and visiting
 # https://viewportsizes.com/mine/
-# Note: It is correct that the iPhone XS Max 
+# Note: It is correct that the iPhone XS Max
 # and the iPhone XR do have the same viewport size.
+
+# Android user agents and viewports from current android device specs.
+# Phone: Samsung Galaxy S9; Tablet: Google Pixel C
+# Determined without a simulator to account for software chrome,
+# so these figures are necessarily larger than what will be true
+# on those devices.
 :desktop:
    :user_agent: "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_3) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/12.0.3 Safari/605.1.15"
    :portrait:
@@ -90,7 +97,7 @@
 :iphone4:
   <<: *iphone4s
 :ipad: &ipad
-  :user_agent: "Mozilla/5.0 (iPad; CPU OS 11_4 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/11.0 Mobile/15E148 Safari/604.1"
+  :user_agent: "Mozilla/5.0 (iPad; CPU OS 12_1_4 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/12.0 Mobile/15E148 Safari/604.1"
   :portrait:
     :width: 768
     :height: 954
@@ -103,12 +110,20 @@
   <<: *ipad
   :portrait:
     :width: 1024
-    :height: 1296
+    :height: 1292
   :landscape:
     :width: 1366
-    :height: 954
+    :height: 950
 :ipad_pro_12:
   <<: *ipad_pro
+:ipad_pro_11:
+  <<: *ipad
+  :portrait:
+    :width: 834
+    :height: 1120
+  :landscape:
+    :width: 1194
+    :height: 760
 :ipad_pro_10:
   <<: *ipad
   :portrait:
@@ -126,18 +141,18 @@
     :width: 1024
     :height: 698
 :android_phone:
-  :user_agent: "Mozilla/5.0 (Linux; U; Android 4.0.1; en-us; sdk Build/ICS_MR0) AppleWebKit/534.30 (KHTML, like Gecko) Version/4.0 Mobile Safari/534.30"
+  :user_agent: "Mozilla/5.0 (Linux; Android 8.0.0; SM-G960F Build/R16NW) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.84 Mobile Safari/537.36"
   :portrait:
-    :width: 320
-    :height: 356
+    :width: 412
+    :height: 846
   :landscape:
-    :width: 480
-    :height: 196
+    :width: 846
+    :height: 412
 :android_tablet:
-  :user_agent: "Mozilla/5.0 (Linux; U; Android 3.0; en-us; GT-P7100 Build/HRI83) AppleWebkit/534.13 (KHTML, like Gecko) Version/4.0 Safari/534.13"
+  :user_agent: "Mozilla/5.0 (Linux; Android 7.0; Pixel C Build/NRD90M; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/52.0.2743.98 Safari/537.36"
   :portrait:
-    :width: 768
-    :height: 946
+    :width: 900
+    :height: 1280
   :landscape:
-    :width: 1024
-    :height: 690
+    :width: 1280
+    :height: 900
