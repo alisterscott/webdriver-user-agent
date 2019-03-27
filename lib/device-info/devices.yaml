@@ -14,7 +14,7 @@
 # so these figures are necessarily larger than what will be true
 # on those devices.
 :desktop:
-   :user_agent: "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_3) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/12.0.3 Safari/605.1.15"
+   :user_agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_3) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/12.0.3 Safari/605.1.15
    :portrait:
      :width: 768
      :height: 1024
@@ -97,7 +97,7 @@
 :iphone4:
   <<: *iphone4s
 :ipad: &ipad
-  :user_agent: "Mozilla/5.0 (iPad; CPU OS 12_1_4 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/12.0 Mobile/15E148 Safari/604.1"
+  :user_agent: Mozilla/5.0 (iPad; CPU OS 12_1_4 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/12.0 Mobile/15E148 Safari/604.1
   :portrait:
     :width: 768
     :height: 954
@@ -141,7 +141,7 @@
     :width: 1024
     :height: 698
 :android_phone:
-  :user_agent: "Mozilla/5.0 (Linux; Android 8.0.0; SM-G960F Build/R16NW) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.84 Mobile Safari/537.36"
+  :user_agent: Mozilla/5.0 (Linux; Android 8.0.0; SM-G960F Build/R16NW) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.84 Mobile Safari/537.36
   :portrait:
     :width: 412
     :height: 846
@@ -149,7 +149,7 @@
     :width: 846
     :height: 412
 :android_tablet:
-  :user_agent: "Mozilla/5.0 (Linux; Android 7.0; Pixel C Build/NRD90M; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/52.0.2743.98 Safari/537.36"
+  :user_agent: Mozilla/5.0 (Linux; Android 7.0; Pixel C Build/NRD90M; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/52.0.2743.98 Safari/537.36
   :portrait:
     :width: 900
     :height: 1280
