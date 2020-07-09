@@ -19,7 +19,7 @@ module Webdriver
 
         options[:viewport_width], options[:viewport_height] = parse_viewport_sizes(options[:viewport_width], options[:viewport_height])
 
-        initialize_for_browser(user_agent_string, opts[:accept_language_string])
+        initialize_for_browser(user_agent_string, opts[:accept_language_string], opts[:options])
       end
 
       def method_missing(*args, &block)
@@ -44,23 +44,32 @@ module Webdriver
         @stp = false unless @stp.is_a?(TrueClass)
       end
 
-      def initialize_for_browser(user_agent_string, accept_language_string)
+      def initialize_for_browser(user_agent_string, accept_language_string, driver_options = nil)
+        options[:options] ||= driver_options
+
         case options[:browser]
         when :firefox
-          profile ||= Selenium::WebDriver::Firefox::Profile.new
-          profile['general.useragent.override'] = user_agent_string
-          profile['intl.accept_languages'] = accept_language_string if accept_language_string
-
           options[:options] ||= Selenium::WebDriver::Firefox::Options.new
+
+          profile ||= options[:options].profile || Selenium::WebDriver::Firefox::Profile.new
+          set_keys = profile.instance_variable_get(:@additional_prefs).keys
+
+          profile['general.useragent.override'] = user_agent_string if !set_keys.include?('general.useragent.override')
+          profile['intl.accept_languages'] = accept_language_string if accept_language_string && !set_keys.include?('intl.accept_languages')
+
           options[:options].profile = profile
         when :chrome
           options[:options] ||= Selenium::WebDriver::Chrome::Options.new
-          options[:options].add_argument "--user-agent=#{user_agent_string}"
-          options[:options].add_preference("intl.accept_languages", accept_language_string) if accept_language_string
+
+          set_args = options[:options].args.map{|s| "#{s}"}.join(" ")
+          options[:options].add_argument "--user-agent=#{user_agent_string}" if !set_args.include?("--user-agent=")
+
+          set_prefs = options[:options].prefs.keys
+          options[:options].add_preference("intl.accept_languages", accept_language_string) if accept_language_string && !set_prefs.include?("intl.accept_languages")
         when :safari
+          options[:options] ||= Selenium::WebDriver::Safari::Options.new
           change_safari_user_agent_string(user_agent_string)
           change_safari_language(accept_language_string) if accept_language_string
-          options
         else
           raise "WebDriver UserAgent currently only supports :chrome, :firefox and :safari."
         end
@@ -88,10 +97,17 @@ module Webdriver
         raise "Safari requires a Mac" unless OS.mac?
 
         cmd = "defaults write com.apple.#{safari_version} #{pref} #{setting}"
-
         output = `#{cmd}`
 
-        raise prepare_safari_error_message(cmd, output) unless $?.success?
+        raise prepare_safari_error_message(cmd, output) unless safari_command_success?(setting, safari_version, pref, $?)
+      end
+
+      def safari_command_success?(setting, safari_version, pref, result)
+        setting_chars = "#{setting}".gsub(/\W/, '')
+        read_chars = `defaults read com.apple.#{safari_version} #{pref}`.gsub(/\W/, '')
+
+        setting_match = (setting_chars == read_chars)
+        setting_match && result.success?
       end
 
       def safari_version

@@ -11,12 +11,76 @@ CHROMEBROWSER_UICHROME_HEIGHT         = 123
 CHROMEBROWSER_UICHROME_HEIGHT_TALL    = 50
 CHROMEBROWSER_UI_MINIMUM_HEIGHT       = 289
 FIREFOXBROWSER_UICHROME_HEIGHT        = 74
+FIREFOXBROWSER_MINIMUM_WIDTH          = 450
 SAFARIBROWSER_UICHROME_HEIGHT         = 38
 
+RSpec.shared_examples "browser driver" do
+  it "creates the browser driver" do
+    expect("#{driver.browser}").to match(/#{Regexp.quote(browser.to_s)}/i)
+  end
+
+  it "matches the agent partial" do
+    expect(driver.execute_script(agent_script)).to include agent_match
+  end
+end
+
+RSpec.shared_examples "random browser driver" do
+  it "creates the browser driver" do
+    expect("#{driver.browser}").to match(/#{Regexp.quote(browser.to_s)}/i)
+  end
+
+  it "matches the agent partial" do
+    expect(driver.execute_script(agent_script)).not_to be_nil
+  end
+end
+
+RSpec.shared_examples "firefox size" do
+  it "matches the expected width" do
+    width_expectation = device.dig(orientation, :width)
+    width_expectation = FIREFOXBROWSER_MINIMUM_WIDTH if width_expectation < FIREFOXBROWSER_MINIMUM_WIDTH
+    expect(driver.execute_script(width_script)).to eq(width_expectation)
+  end
+
+  it "matches the expected height" do
+    height_expectation = device.dig(orientation, :height) - FIREFOXBROWSER_UICHROME_HEIGHT
+    expect(driver.execute_script(height_script)).to eq(height_expectation)
+  end
+end
+
+RSpec.shared_examples "safari size" do
+  it "matches the expected width" do
+    width_expectation = device.dig(orientation, :width)
+    expect(driver.execute_script(width_script)).to eq(width_expectation)
+  end
+
+  it "matches the expected height" do
+    height_expectation = device.dig(orientation, :height) - SAFARIBROWSER_UICHROME_HEIGHT
+    expect(driver.execute_script(height_script)).to eq(height_expectation)
+  end
+end
+
+RSpec.shared_examples "chrome size" do
+  it "matches the expected width" do
+    width_expectation = device.dig(orientation, :width)
+    expect(driver.execute_script(width_script)).to eq(width_expectation)
+  end
+
+  it "matches the expected height" do
+    height_expectation = device.dig(orientation, :height) - CHROMEBROWSER_UICHROME_HEIGHT
+    expect(driver.execute_script(height_script)).to eq(height_expectation)
+  end
+end
+
 describe "webdriver user agent" do
+  let(:devices) { Webdriver::UserAgent.devices }
+  let(:agent_script) { 'return navigator.userAgent' }
+  let(:width_script) { 'return Math.max(document.documentElement.clientWidth, window.innerWidth || 0)' }
+  let(:height_script) { 'return Math.max(document.documentElement.clientHeight, window.innerHeight || 0)' }
+
   after :each do
-    @browser.close if @browser rescue nil
-    @driver.quit if @driver rescue nil
+    driver.quit if defined?(driver)
+    browser.close if defined?(browser) && browser&.is_a?(Watir::Browser)
+    sleep(0.5) # Safari needs time to shutdown
   end
 
   # window.innerWidth and window.innerHeight
@@ -24,37 +88,94 @@ describe "webdriver user agent" do
   # browser widths and heights
   # http://stackoverflow.com/a/8876069/1651458
 
-  it "can create a new webdriver driver using firefox and iphone (portrait) by default" do
-  	@driver = Webdriver::UserAgent.driver
-  	expect(@driver.browser).to eq(:firefox)
-  	expect(@driver.execute_script('return navigator.userAgent')).to include 'iPhone'
-  	expect(@driver.execute_script('return Math.max(document.documentElement.clientWidth, window.innerWidth || 0)')).to eq(414)
-  	expect(@driver.execute_script('return Math.max(document.documentElement.clientHeight, window.innerHeight || 0)')).to eq(719 - FIREFOXBROWSER_UICHROME_HEIGHT)
+  context "no browser, agent or orientation set" do
+    let(:device) { devices[:iphone] }
+    let(:driver) { Webdriver::UserAgent.driver }
+    let(:browser) { "firefox" }
+    let(:orientation) { :portrait }
+    let(:agent_match) { 'iPhone' }
+
+    it_behaves_like "browser driver"
+    it_behaves_like "firefox size"
   end
 
-  it "can create a new webdriver driver using safari and iphone 6 plus, and landscape" do
-  	@driver = Webdriver::UserAgent.driver(:browser => :safari, :agent => :iphone6plus, :orientation => :landscape)
-  	expect("#{@driver.browser}").to match(/safari/i)
+  context "Safari browser, iPhone 11 Pro Max agent, landscape orientation" do
+    let(:device) { devices[:iphone11promax] }
+    let(:orientation) { :landscape }
+    let(:driver) do
+      # Safari is a mess. safari_technology_preview added because
+      # Safari just isn't working in my environment as of 13.1 - Sam
 
-  	expect(@driver.execute_script('return navigator.userAgent')).to include 'iPhone'
-  	expect(@driver.execute_script('return Math.max(document.documentElement.clientWidth, window.innerWidth || 0)')).to eq(736)
-  	expect(@driver.execute_script('return Math.max(document.documentElement.clientHeight, window.innerHeight || 0)')).to eq(414 - SAFARIBROWSER_UICHROME_HEIGHT)
+      Webdriver::UserAgent.driver(
+        browser: :safari,
+        agent: :iphone11promax,
+        orientation: orientation,
+        safari_technology_preview: true
+      )
+    end
+    let(:browser) { "safari" }
+    let(:orientation) { :landscape }
+    let(:agent_match) { 'iPhone' }
+
+    it_behaves_like "browser driver"
+    it_behaves_like "safari size"
   end
 
-  it "can create a new webdriver driver using chrome and iphone 6 plus (landscape)" do
-  	@driver = Webdriver::UserAgent.driver(:browser => :chrome, :agent => :iphone6plus, :orientation => :landscape)
-  	expect(@driver.browser).to eq(:chrome)
-  	expect(@driver.execute_script('return navigator.userAgent')).to include 'iPhone'
-  	expect(@driver.execute_script('return Math.max(document.documentElement.clientWidth, window.innerWidth || 0)')).to eq(736)
-  	expect(@driver.execute_script('return Math.max(document.documentElement.clientHeight, window.innerHeight || 0)')).to eq(414 - CHROMEBROWSER_UICHROME_HEIGHT)
+  context "Safari browser, iPhone 6 Plus agent, landscape orientation" do
+    let(:device) { devices[:iphone6plus] }
+    let(:orientation) { :landscape }
+    let(:driver) do
+      # Safari is a mess. safari_technology_preview added because
+      # Safari just isn't working in my environment as of 13.1 - Sam
+
+      Webdriver::UserAgent.driver(
+        browser: :safari,
+        agent: :iphone6plus,
+        orientation: orientation,
+        safari_technology_preview: true
+      )
+    end
+    let(:browser) { "safari" }
+    let(:agent_match) { 'iPhone' }
+
+    it_behaves_like "browser driver"
+    it_behaves_like "safari size"
   end
 
-  it "can create a new webdriver driver using chrome and iPad (landscape)" do
-  	@driver = Webdriver::UserAgent.driver(:browser => :chrome, :agent => :ipad, :orientation => :landscape)
-  	expect(@driver.browser).to eq(:chrome)
-  	expect(@driver.execute_script('return navigator.userAgent')).to include 'iPad'
-  	expect(@driver.execute_script('return Math.max(document.documentElement.clientWidth, window.innerWidth || 0)')).to eq(1024)
-  	expect(@driver.execute_script('return Math.max(document.documentElement.clientHeight, window.innerHeight || 0)')).to eq(698 - CHROMEBROWSER_UICHROME_HEIGHT)
+  context "Chrome browser, iPhone XS agent, landscape orientation" do
+    let(:device_key) { :iphonexs }
+    let(:device) { devices[device_key] }
+    let(:orientation) { :landscape }
+    let(:driver) do
+      Webdriver::UserAgent.driver(
+        browser: :chrome,
+        agent: device_key,
+        orientation: orientation
+      )
+    end
+    let(:browser) { "chrome" }
+    let(:agent_match) { 'iPhone' }
+
+    it_behaves_like "browser driver"
+    it_behaves_like "chrome size"
+  end
+
+  context "Chrome browser, iPhone XS agent, landscape orientation" do
+    let(:device_key) { :ipad }
+    let(:device) { devices[device_key] }
+    let(:orientation) { :landscape }
+    let(:driver) do
+      Webdriver::UserAgent.driver(
+        browser: :chrome,
+        agent: device_key,
+        orientation: orientation
+      )
+    end
+    let(:browser) { "chrome" }
+    let(:agent_match) { 'Mac OS' }
+
+    it_behaves_like "browser driver"
+    it_behaves_like "chrome size"
   end
 
   it "can create a new webdriver driver using chrome and iPad Pro (portrait)" do
@@ -73,123 +194,195 @@ describe "webdriver user agent" do
 
   	@driver = Webdriver::UserAgent.driver(:browser => :chrome, :agent => :ipad_pro, :orientation => :portrait)
   	expect(@driver.browser).to eq(:chrome)
-  	expect(@driver.execute_script('return navigator.userAgent')).to include 'iPad'
+  	expect(@driver.execute_script('return navigator.userAgent')).to include 'Mac OS'
   	expect(@driver.execute_script('return Math.max(document.documentElement.clientWidth, window.innerWidth || 0)')).to eq(1024)
 
     # See above
     if @you_have_a_tall_monitor
-  	   expect(@driver.execute_script('return Math.max(document.documentElement.clientHeight, window.innerHeight || 0)')).to eq(1302 - CHROMEBROWSER_UICHROME_HEIGHT)
-     end
+      expect(@driver.execute_script('return Math.max(document.documentElement.clientHeight, window.innerHeight || 0)')).to eq(1302 - CHROMEBROWSER_UICHROME_HEIGHT)
+    end
   end
 
-  it "can create a new webdriver driver using firefox and android phone (landscape)" do
-    @driver = Webdriver::UserAgent.driver(:browser => :chrome, :agent => :android_phone, :orientation => :landscape)
-    expect(@driver.browser).to eq(:chrome)
-    expect(@driver.execute_script('return navigator.userAgent')).to include 'Android'
-    expect(@driver.execute_script('return Math.max(document.documentElement.clientWidth, window.innerWidth || 0)')).to eq(846)
+  context "Chrome browser, Android tablet agent, landscape orientation" do
+    let(:device_key) { :android_tablet }
+    let(:device) { devices[device_key] }
+    let(:orientation) { :landscape }
+    let(:driver) do
+      Webdriver::UserAgent.driver(
+        browser: :chrome,
+        agent: device_key,
+        orientation: orientation
+      )
+    end
+    let(:browser) { "chrome" }
+    let(:agent_match) { 'Android' }
 
-    # Chrome is apparently setting some kind of minimum height
-    # As seen on Chrome v42 on OS X Yosimite
-    expect(@driver.execute_script('return Math.max(document.documentElement.clientHeight, window.innerHeight || 0)')).to eq(CHROMEBROWSER_UI_MINIMUM_HEIGHT)
+    it_behaves_like "browser driver"
+    it_behaves_like "chrome size"
   end
 
-  it "can create a new webdriver driver using chrome and android tablet (portrait)" do
-    @driver = Webdriver::UserAgent.driver(:browser => :chrome, :agent => :android_tablet, :orientation => :portrait)
-    expect(@driver.browser).to eq(:chrome)
-    expect(@driver.execute_script('return navigator.userAgent')).to include 'Android'
-    expect(@driver.execute_script('return Math.max(document.documentElement.clientWidth, window.innerWidth || 0)')).to eq(900)
-    expect(@driver.execute_script('return Math.max(document.documentElement.clientHeight, window.innerHeight || 0)')).to eq(984 - CHROMEBROWSER_UICHROME_HEIGHT_TALL)
+  context "Firefox browser, desktop agent, landscape orientation" do
+    let(:device_key) { :desktop }
+    let(:device) { devices[device_key] }
+    let(:orientation) { :landscape }
+    let(:driver) do
+      Webdriver::UserAgent.driver(
+        browser: :firefox,
+        agent: device_key,
+        orientation: orientation
+      )
+    end
+    let(:browser) { "firefox" }
+    let(:agent_match) { 'Mac OS' }
+
+    it_behaves_like "browser driver"
+    it_behaves_like "firefox size"
   end
 
-  it "can create a new webdriver driver using firefox and desktop (landscape)" do
-    @driver = Webdriver::UserAgent.driver(:browser => :firefox, :agent => :desktop, :orientation => :landscape)
-    expect(@driver.browser).to eq(:firefox)
-    expect(@driver.execute_script('return navigator.userAgent')).to include 'Mac OS X'
-    expect(@driver.execute_script('return Math.max(document.documentElement.clientWidth, window.innerWidth || 0)')).to eq(1366)
-    expect(@driver.execute_script('return Math.max(document.documentElement.clientHeight, window.innerHeight || 0)')).to eq(768 - FIREFOXBROWSER_UICHROME_HEIGHT)
+  context "random agent" do
+    context "no specified browser" do
+      let(:device_key) { :random }
+      let(:driver) { Webdriver::UserAgent.driver(agent: device_key) }
+      let(:browser) { :firefox }
+
+      it_behaves_like "random browser driver"
+    end
+
+    context "chrome browser" do
+      let(:device_key) { :random }
+      let(:browser) { :chrome }
+      let(:driver) do
+        Webdriver::UserAgent.driver(browser: browser, agent: device_key)
+      end
+
+      it_behaves_like "random browser driver"
+    end
   end
 
-   it "can create a new webdriver driver using firefox and random user agent" do
-    @driver = Webdriver::UserAgent.driver(:agent => :random)
-    expect(@driver.browser).to eq(:firefox)
-    expect(@driver.execute_script('return navigator.userAgent')).not_to be_nil
-    expect(@driver.execute_script('return Math.max(document.documentElement.clientWidth, window.innerWidth || 0)')).not_to eq(320)
-    expect(@driver.execute_script('return Math.max(document.documentElement.clientHeight, window.innerHeight || 0)')).not_to eq(356 - FIREFOXBROWSER_UICHROME_HEIGHT)
+  context "existing firefox profile" do
+    let(:device) { devices[:iphone] }
+    let(:profile) do
+      profile = Selenium::WebDriver::Firefox::Profile.new
+      profile["intl.accept_languages"] = "es-MX"
+      profile
+    end
+    let(:options) { Selenium::WebDriver::Firefox::Options.new(profile: profile) }
+    let(:browser) { :firefox }
+    let(:agent_match) { 'iPhone' }
+    let(:orientation) { :portrait }
+    let(:driver) { Webdriver::UserAgent.driver(browser: browser, options: options) }
+
+    it_behaves_like "browser driver"
+    it_behaves_like "firefox size"
+
+    it "absorbs the options' profile" do
+      expect(driver.execute_script("return (navigator.language || navigator.userLanguage)")).to include("es-MX")
+    end
   end
 
-  it "can create a new webdriver driver using chrome and random user agent" do
-    @driver = Webdriver::UserAgent.driver(:browser => :chrome, :agent => :random)
-    expect(@driver.browser).to eq(:chrome)
-    expect(@driver.execute_script('return navigator.userAgent')).not_to be_nil
-    expect(@driver.execute_script('return Math.max(document.documentElement.clientWidth, window.innerWidth || 0)')).not_to eq(320)
-    expect(@driver.execute_script('return Math.max(document.documentElement.clientHeight, window.innerHeight || 0)')).not_to eq(356 - CHROMEBROWSER_UICHROME_HEIGHT)
+  context "user-provided user agent string for firefox" do
+    let(:browser) { :firefox }
+    let(:user_agent) { "Mozilla/4.0 (compatible; MSIE 5.5b1; Mac_PowerPC)" }
+    let(:driver) { Webdriver::UserAgent.driver(user_agent_string: user_agent) }
+
+    it "can create a new webdriver driver" do
+      expect("#{driver.browser}").to match(/#{Regexp.quote(browser.to_s)}/i)
+
+      expect(driver.execute_script("return navigator.userAgent")).to include("Mac_PowerPC")
+    end
   end
 
-  it "can create a new webdriver driver using an existing firefox profile" do
-    profile = Selenium::WebDriver::Firefox::Profile.new
-    profile['browser.startup.homepage'] = "data:text/html,<title>hello</title>"
-    options = Selenium::WebDriver::Firefox::Options.new
-    options.profile = profile
-    @driver = Webdriver::UserAgent.driver(:browser => :firefox, options: options)
+  context "user-provided accept language string for firefox" do
+    let(:browser) { :firefox }
+    let(:language) { "es-ES, es-MX;q=0.9, es;q=0.5, *;0.4" }
+    let(:driver) { Webdriver::UserAgent.driver(accept_language_string: language) }
 
-    expect(@driver.browser).to eq(:firefox)
-    expect(@driver.execute_script('return navigator.userAgent')).to include 'iPhone'
-    expect(@driver.execute_script('return Math.max(document.documentElement.clientWidth, window.innerWidth || 0)')).to eq(414)
-    expect(@driver.execute_script('return Math.max(document.documentElement.clientHeight, window.innerHeight || 0)')).to eq(719 - FIREFOXBROWSER_UICHROME_HEIGHT)
+    it "can create a new webdriver driver" do
+      expect("#{driver.browser}").to match(/#{Regexp.quote(browser.to_s)}/i)
+
+      expect(driver.execute_script("return (navigator.language || navigator.userLanguage)")).to include("es-ES")
+    end
   end
 
-  it "can create a new webdriver driver using firefox and user-specified user agent" do
-    @driver = Webdriver::UserAgent.driver(:user_agent_string => "Mozilla/4.0 (compatible; MSIE 5.5b1; Mac_PowerPC)")
-    expect(@driver.browser).to eq(:firefox)
-    expect(@driver.execute_script('return navigator.userAgent')).to include 'Mac_PowerPC'
+  context "user-provided accept language string for safari" do
+    let(:browser) { :safari }
+    let(:language) { "es-ES, es-MX;q=0.9, es;q=0.5, *;0.4" }
+    let(:driver) {
+      Webdriver::UserAgent.driver(
+        browser: browser,
+        accept_language_string: language,
+        safari_technology_preview: true
+      )
+    }
 
-    @browser = Watir::Browser.new @driver
+    it "can create a new webdriver driver" do
+      expect("#{driver.browser}").to match(/#{Regexp.quote(browser.to_s)}/i)
+
+      expect(driver.execute_script("return (navigator.language || navigator.userLanguage)")).to include("es-es")
+    end
   end
 
-  it "can create a new webdriver driver using firefox and user-specified language" do
-    @driver = Webdriver::UserAgent.driver(accept_language_string: "es-ES, es-MX;q=0.9, es;q=0.5, *;0.4")
-    expect(@driver.browser).to eq(:firefox)
-    expect(@driver.execute_script('return navigator.language')).to include 'es-ES'
+  context "user-provided viewport size and agent for firefox" do
+    let(:browser) { :firefox }
+    let(:device_key) { :iphone11 }
+    let(:device) { devices[device_key] }
+    let(:width) { 800 }
+    let(:height) { 600 }
+    let(:agent_match) { 'iPhone' }
+    let(:orientation) { :portrait }
+    let(:driver) {
+      Webdriver::UserAgent.driver(
+        viewport_width: "#{width}",
+        viewport_height: height,
+        agent: device_key
+      )
+    }
 
-    @browser = Watir::Browser.new @driver
+    it_behaves_like "browser driver"
+    it "uses user-provided dimensions" do
+    	expect(driver.execute_script(width_script)).to eq(width)
+    	expect(driver.execute_script(height_script)).to eq(height - FIREFOXBROWSER_UICHROME_HEIGHT)
+    end
   end
 
-  it "can create a new webdriver driver using chrome and user-specified language" do
-    @driver = Webdriver::UserAgent.driver(browser: :chrome, accept_language_string: "es-ES, es-MX;q=0.9, es;q=0.5, *;0.4")
-    expect(@driver.browser).to eq(:chrome)
-    expect(@driver.execute_script('return navigator.language')).to include 'es-ES'
+  context "user-provided nonsense viewport size for firefox" do
+    let(:browser) { :firefox }
+    let(:device_key) { :iphone8 }
+    let(:device) { devices[device_key] }
+    let(:width) { "xyz" }
+    let(:agent_match) { 'iPhone' }
+    let(:orientation) { :portrait }
+    let(:driver) {
+      Webdriver::UserAgent.driver(
+        viewport_width: "#{width}",
+        agent: device_key
+      )
+    }
 
-    @browser = Watir::Browser.new @driver
+    it_behaves_like "browser driver"
+    it_behaves_like "firefox size"
   end
 
-  it "can create a new webdriver driver using safari and user-specified language" do
-    @driver = Webdriver::UserAgent.driver(browser: :safari, accept_language_string: "es-ES, es-MX;q=0.9, es;q=0.5, *;0.4", safari_technology_preview: true)
-    expect(@driver.browser).to match(/safari/i)
-    expect(@driver.execute_script('return navigator.language')).to include 'es-ES'
+  context "portrait firefox iphone" do
+    let(:browser) { :firefox }
+    let(:device_key) { :iphone }
+    let(:device) { devices[device_key] }
+    let(:width) { "xyz" }
+    let(:agent_match) { 'iPhone' }
+    let(:orientation) { :portrait }
+    let(:driver) {
+      Webdriver::UserAgent.driver(
+        agent: device_key,
+        browser: browser,
+        orientation: orientation
+      )
+    }
 
-    @browser = Watir::Browser.new @driver
+    it "can create a browser using the driver" do
+      browser = Watir::Browser.new(driver)
+
+      expect(browser).to be_a(Watir::Browser)
+      expect(browser.url).to be_a(String)
+    end
   end
-
-  it "can create a new webdriver driver using firefox and user-specified viewport sizes (string or int)" do
-    width = 800
-    height = 600
-
-    @driver = Webdriver::UserAgent.driver(:viewport_width => "#{width}", :viewport_height => height, :agent => :iphone6)
-    expect(@driver.execute_script('return Math.max(document.documentElement.clientWidth, window.innerWidth || 0)')).to eq(800)
-    expect(@driver.execute_script('return Math.max(document.documentElement.clientHeight, window.innerHeight || 0)')).to eq(600 - FIREFOXBROWSER_UICHROME_HEIGHT)
-  end
-
-  it "can create a new webdriver driver, handling for nonsense height and widths" do
-    @driver = Webdriver::UserAgent.driver(:viewport_width => "abc", :agent => :iphone8)
-    expect(@driver.execute_script('return Math.max(document.documentElement.clientWidth, window.innerWidth || 0)')).to eq(375)
-  	expect(@driver.execute_script('return Math.max(document.documentElement.clientHeight, window.innerHeight || 0)')).to eq(553 - FIREFOXBROWSER_UICHROME_HEIGHT)
- end
-
-  it "can allow using selenium driver for watir browser" do
-    @driver = Webdriver::UserAgent.driver(:browser => :firefox, :agent => :iphone, :orientation => :portrait)
-    @browser = Watir::Browser.new @driver
-    expect(@browser).to be_a(Watir::Browser)
-    expect(@browser.url).to be_a(String)
-  end
-
 end
