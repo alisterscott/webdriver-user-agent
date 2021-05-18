@@ -13,6 +13,7 @@ CHROMEBROWSER_UI_MINIMUM_HEIGHT       = 289
 FIREFOXBROWSER_UICHROME_HEIGHT        = 74
 FIREFOXBROWSER_MINIMUM_WIDTH          = 450
 SAFARIBROWSER_UICHROME_HEIGHT         = 38
+SIZE_FUDGE_FACTOR                     = 0.05
 
 RSpec.shared_examples "browser driver" do
   it "creates the browser driver" do
@@ -38,36 +39,42 @@ RSpec.shared_examples "firefox size" do
   it "matches the expected width" do
     width_expectation = device.dig(orientation, :width)
     width_expectation = FIREFOXBROWSER_MINIMUM_WIDTH if width_expectation < FIREFOXBROWSER_MINIMUM_WIDTH
-    expect(driver.execute_script(width_script)).to eq(width_expectation)
+    width_expectation_fudge = width_expectation.to_f * SIZE_FUDGE_FACTOR
+    expect(driver.execute_script(width_script)).to be_within(width_expectation_fudge).of(width_expectation)
   end
 
   it "matches the expected height" do
     height_expectation = device.dig(orientation, :height) - FIREFOXBROWSER_UICHROME_HEIGHT
-    expect(driver.execute_script(height_script)).to eq(height_expectation)
+    height_expectation_fudge = height_expectation.to_f * SIZE_FUDGE_FACTOR
+    expect(driver.execute_script(height_script)).to be_within(height_expectation_fudge).of(height_expectation)
   end
 end
 
 RSpec.shared_examples "safari size" do
   it "matches the expected width" do
     width_expectation = device.dig(orientation, :width)
-    expect(driver.execute_script(width_script)).to eq(width_expectation)
+    width_expectation_fudge = width_expectation.to_f * SIZE_FUDGE_FACTOR
+    expect(driver.execute_script(width_script)).to be_within(width_expectation_fudge).of(width_expectation)
   end
 
   it "matches the expected height" do
     height_expectation = device.dig(orientation, :height) - SAFARIBROWSER_UICHROME_HEIGHT
-    expect(driver.execute_script(height_script)).to eq(height_expectation)
+    height_expectation_fudge = height_expectation.to_f * SIZE_FUDGE_FACTOR
+    expect(driver.execute_script(height_script)).to be_within(height_expectation_fudge).of(height_expectation)
   end
 end
 
 RSpec.shared_examples "chrome size" do
   it "matches the expected width" do
     width_expectation = device.dig(orientation, :width)
-    expect(driver.execute_script(width_script)).to eq(width_expectation)
+    width_expectation_fudge = width_expectation.to_f * SIZE_FUDGE_FACTOR
+    expect(driver.execute_script(width_script)).to be_within(width_expectation_fudge).of(width_expectation)
   end
 
   it "matches the expected height" do
     height_expectation = device.dig(orientation, :height) - CHROMEBROWSER_UICHROME_HEIGHT
-    expect(driver.execute_script(height_script)).to eq(height_expectation)
+    height_expectation_fudge = height_expectation.to_f * SIZE_FUDGE_FACTOR
+    expect(driver.execute_script(height_script)).to be_within(height_expectation_fudge).of(height_expectation)
   end
 end
 
@@ -80,6 +87,10 @@ describe "webdriver user agent" do
   after :each do
     driver.quit if defined?(driver)
     browser.close if defined?(browser) && browser&.is_a?(Watir::Browser)
+    `defaults delete com.apple.SafariTechnologyPreview CustomUserAgent >/dev/null 2>/dev/null`
+    `defaults delete com.apple.SafariTechnologyPreview AppleLanguages >/dev/null 2>/dev/null`
+    `defaults delete com.apple.Safari CustomUserAgent >/dev/null 2>/dev/null`
+    `defaults delete com.apple.Safari AppleLanguages >/dev/null 2>/dev/null`
     sleep(0.5) # Safari needs time to shutdown
   end
 
@@ -109,15 +120,14 @@ describe "webdriver user agent" do
       Webdriver::UserAgent.driver(
         browser: :safari,
         agent: :iphone11promax,
-        orientation: orientation,
-        safari_technology_preview: true
+        orientation: orientation
       )
     end
     let(:browser) { "safari" }
     let(:orientation) { :landscape }
     let(:agent_match) { 'iPhone' }
 
-    it_behaves_like "browser driver"
+    pending("a stable, documented way to programmatically change Safari details") { it_behaves_like "browser driver" }
     it_behaves_like "safari size"
   end
 
@@ -131,14 +141,13 @@ describe "webdriver user agent" do
       Webdriver::UserAgent.driver(
         browser: :safari,
         agent: :iphone6plus,
-        orientation: orientation,
-        safari_technology_preview: true
+        orientation: orientation
       )
     end
     let(:browser) { "safari" }
     let(:agent_match) { 'iPhone' }
 
-    it_behaves_like "browser driver"
+    pending("a stable, documented way to programmatically change Safari details") { it_behaves_like "browser driver" }
     it_behaves_like "safari size"
   end
 
@@ -310,15 +319,16 @@ describe "webdriver user agent" do
     let(:driver) {
       Webdriver::UserAgent.driver(
         browser: browser,
-        accept_language_string: language,
-        safari_technology_preview: true
+        accept_language_string: language
       )
     }
 
     it "can create a new webdriver driver" do
       expect("#{driver.browser}").to match(/#{Regexp.quote(browser.to_s)}/i)
-
-      expect(driver.execute_script("return (navigator.language || navigator.userLanguage)")).to include("es-es")
+      
+      pending("a stable, documented way to programmatically change Safari details") do
+        expect(driver.execute_script("return (navigator.language || navigator.userLanguage)")).to include("es-es")
+      end
     end
   end
 

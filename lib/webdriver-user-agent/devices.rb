@@ -5,7 +5,7 @@ module Webdriver
     module Devices
 
       def devices
-        YAML.load_file devices_file
+        (YAML.load_file devices_file, aliases: true).deep_symbolize_keys!
       end
 
       def resolution_for(device_name, orientation, user_width, user_height)
