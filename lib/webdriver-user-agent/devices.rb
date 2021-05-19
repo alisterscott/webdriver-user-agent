@@ -11,18 +11,22 @@ module Webdriver
       def resolution_for(device_name, orientation, user_width, user_height)
         return [user_width.to_i, user_height.to_i] if ((user_width.to_i + user_height.to_i) > 1)
 
-        device = devices[device_name.downcase][orientation.downcase]
+        device = devices[keyify(device_name)][keyify(orientation)]
         [device[:width],device[:height]]
       end
 
       def agent_string_for(device)
-        device = (device ? device.downcase : :iphone)
+        device = (device ? keyify(device) : :iphone)
         user_agent_string = (device == :random ? random_user_agent : devices[device][:user_agent])
         raise "Unsupported user agent: '#{device}'." unless user_agent_string
         user_agent_string
       end
 
       private
+      
+      def keyify(target)
+        target.downcase.to_sym
+      end
 
       def random_user_agent
         File.foreach(user_agents_file).each_with_index.reduce(nil) do |picked,pair|
