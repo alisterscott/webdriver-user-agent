@@ -15,17 +15,6 @@ module Webdriver
         user_agent_string ||= agent_string_for opts[:agent]
         options = BrowserOptions.new(opts, user_agent_string)
         build_driver_using options
-      ensure
-        if safari?(opts)
-          case
-          when opts[:safari_technology_preview].is_a?(TrueClass)
-            `defaults delete com.apple.SafariTechnologyPreview CustomUserAgent`
-            `defaults delete com.apple.SafariTechnologyPreview AppleLanguages`
-          else
-            `defaults delete com.apple.Safari CustomUserAgent`
-            `defaults delete com.apple.Safari AppleLanguages`
-          end
-        end
       end
 
       private
