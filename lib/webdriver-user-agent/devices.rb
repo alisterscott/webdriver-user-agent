@@ -5,7 +5,8 @@ module Webdriver
     module Devices
 
       def devices
-        YAML.load_file devices_file
+        string_hash = YAML.safe_load_file devices_file, aliases: true
+        JSON.parse(JSON[string_hash], symbolize_names: true)
       end
 
       def resolution_for(device_name, orientation, user_width, user_height)

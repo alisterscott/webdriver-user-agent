@@ -13,161 +13,162 @@
 # so these figures are necessarily larger than what will be true
 # on those devices. Please feel free to submit a pull request
 # with corrected and/or expanded device values.
-:desktop:
-   :user_agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_4) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1 Safari/605.1.15
-   :portrait:
-     :width: 768
-     :height: 1024
-   :landscape:
-     :width: 1366
-     :height: 768
-:iphone_default: &iphone_default
-   :user_agent: Mozilla/5.0 (iPhone; CPU iPhone OS 13_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1.1 Mobile/15E148 Safari/604.1
-   :portrait:
-     :width: 414
-     :height: 719
-   :landscape:
-     :width: 808
-     :height: 414
-:iphone: &iphone
+---
+desktop:
+  user_agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_4) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1 Safari/605.1.15
+  portrait:
+    width: 768
+    height: 1024
+  landscape:
+    width: 1366
+    height: 768
+iphone_default: &iphone_default
+  user_agent: Mozilla/5.0 (iPhone; CPU iPhone OS 13_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1.1 Mobile/15E148 Safari/604.1
+  portrait:
+    width: 414
+    height: 719
+  landscape:
+    width: 808
+    height: 414
+iphone: &iphone
   <<: *iphone_default
-:iphone11pro:
+iphone11pro:
   <<: *iphone_default
-  :portrait:
-    :width: 375
-    :height: 635
-  :landscape:
-    :width: 724
-    :height: 375
-:iphone11promax:
+  portrait:
+    width: 375
+    height: 635
+  landscape:
+    width: 724
+    height: 375
+iphone11promax:
   <<: *iphone_default
-:iphone11:
+iphone11:
   <<: *iphone_default
-:iphonese: &iphonese
+iphonese: &iphonese
   <<: *iphone_default
-  :portrait:
-    :width: 375
-    :height: 553
-  :landscape:
-    :width: 667
-    :height: 375
-:iphonexr: &iphonexr
+  portrait:
+    width: 375
+    height: 553
+  landscape:
+    width: 667
+    height: 375
+iphonexr: &iphonexr
   <<: *iphone_default
-:iphonexsmax:
+iphonexsmax:
   <<: *iphonexr
-:iphonexs: &iphonexs
+iphonexs: &iphonexs
   <<: *iphone_default
-  :portrait:
-    :width: 375
-    :height: 635
-  :landscape:
-    :width: 724
-    :height: 375
-:iphonex:
+  portrait:
+    width: 375
+    height: 635
+  landscape:
+    width: 724
+    height: 375
+iphonex:
   <<: *iphonexs
-:iphone8plus: &iphone8plus
+iphone8plus: &iphone8plus
   <<: *iphone_default
-  :portrait:
-    :width: 414
-    :height: 622
-  :landscape:
-    :width: 736
-    :height: 414
-:iphone8: &iphone8
+  portrait:
+    width: 414
+    height: 622
+  landscape:
+    width: 736
+    height: 414
+iphone8: &iphone8
   <<: *iphonese
-:iphone7plus:
+iphone7plus:
   <<: *iphone8plus
-:iphone7:
+iphone7:
   <<: *iphone8
-:iphone6splus:
+iphone6splus:
   <<: *iphone8plus
-:iphone6s:
+iphone6s:
   <<: *iphone8
-:iphone6plus:
+iphone6plus:
   <<: *iphone8plus
-:iphone6:
+iphone6:
   <<: *iphone8
-:iphone5s: &iphone5s
+iphone5s: &iphone5s
   <<: *iphone_default
-  :portrait:
-    :width: 320
-    :height: 454
-  :landscape:
-    :width: 568
-    :height: 320
-:iphonese_old:
+  portrait:
+    width: 320
+    height: 454
+  landscape:
+    width: 568
+    height: 320
+iphonese_old:
   <<: *iphone5s
-:iphone5:
+iphone5:
   <<: *iphone5s
-:iphone4s: &iphone4s
+iphone4s: &iphone4s
   <<: *iphone_default
-  :portrait:
-    :width: 320
-    :height: 356
-  :landscape:
-    :width: 480
-    :height: 196
-:iphone4:
+  portrait:
+    width: 320
+    height: 356
+  landscape:
+    width: 480
+    height: 196
+iphone4:
   <<: *iphone4s
-:ipad: &ipad
-  :user_agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_4) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1.1 Safari/605.1.15
-  :portrait:
-    :width: 810
-    :height: 1010
-  :landscape:
-    :width: 1080
-    :height: 740
-:ipad_default:
+ipad: &ipad
+  user_agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_4) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1.1 Safari/605.1.15
+  portrait:
+    width: 810
+    height: 1010
+  landscape:
+    width: 1080
+    height: 740
+ipad_default:
   <<: *ipad
-:ipad_pro: &ipad_pro
+ipad_pro: &ipad_pro
   <<: *ipad
-  :portrait:
-    :width: 1024
-    :height: 1292
-  :landscape:
-    :width: 1366
-    :height: 950
-:ipad_pro_12:
+  portrait:
+    width: 1024
+    height: 1292
+  landscape:
+    width: 1366
+    height: 950
+ipad_pro_12:
   <<: *ipad_pro
-:ipad_pro_11:
+ipad_pro_11:
   <<: *ipad
-  :portrait:
-    :width: 834
-    :height: 1120
-  :landscape:
-    :width: 1194
-    :height: 760
-:ipad_pro_9:
+  portrait:
+    width: 834
+    height: 1120
+  landscape:
+    width: 1194
+    height: 760
+ipad_pro_9:
   <<: *ipad
-  :portrait:
-    :width: 768
-    :height: 954
-  :landscape:
-    :width: 1024
-    :height: 698
-:ipad_air: &ipad_air
+  portrait:
+    width: 768
+    height: 954
+  landscape:
+    width: 1024
+    height: 698
+ipad_air: &ipad_air
   <<: *ipad
-  :portrait:
-    :width: 834
-    :height: 1038
-  :landscape:
-    :width: 1112
-    :height: 760
-:ipad_pro_10:
+  portrait:
+    width: 834
+    height: 1038
+  landscape:
+    width: 1112
+    height: 760
+ipad_pro_10:
   <<: *ipad_air
-:android_phone:
-  :user_agent: Mozilla/5.0 (Linux; Android 10; Pixel) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.87 Mobile Safari/537.36
-  :portrait:
-    :width: 411
-    :height: 869
-  :landscape:
-    :width: 869
-    :height: 411
-:android_tablet:
-  :user_agent: Mozilla/5.0 (Linux; Android 9; SAMSUNG SM-T865) AppleWebKit/537.36 (KHTML, like Gecko) SamsungBrowser/10.1 Chrome/71.0.3578.99 Safari/537.36
-  :portrait:
-    :width: 800
-    :height: 1280
-  :landscape:
-    :width: 1280
-    :height: 800
+android_phone:
+  user_agent: Mozilla/5.0 (Linux; Android 10; Pixel) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.87 Mobile Safari/537.36
+  portrait:
+    width: 411
+    height: 869
+  landscape:
+    width: 869
+    height: 411
+android_tablet:
+  user_agent: Mozilla/5.0 (Linux; Android 9; SAMSUNG SM-T865) AppleWebKit/537.36 (KHTML, like Gecko) SamsungBrowser/10.1 Chrome/71.0.3578.99 Safari/537.36
+  portrait:
+    width: 800
+    height: 1280
+  landscape:
+    width: 1280
+    height: 800
