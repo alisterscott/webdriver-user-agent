@@ -1,4 +1,5 @@
 require 'webdriver-user-agent/core_ext/symbol'
+require 'webdriver-user-agent/core_ext/hash'
 require 'webdriver-user-agent/driver'
 
 module Webdriver

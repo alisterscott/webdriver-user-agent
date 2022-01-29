@@ -25,7 +25,7 @@ provides a UserAgent.driver method to return a new web-driver with user agent an
 * :browser
 	* :firefox (default)
 	* :chrome
-  * :safari
+    * :safari
 * :agent
 	* :iphone (default)
 	* :ipad
@@ -60,6 +60,12 @@ provides a UserAgent.driver method to return a new web-driver with user agent an
 	browser = Watir::Browser.new(driver)
 	browser.goto 'tiffany.com'
 	browser.url.should == 'http://m.tiffany.com/International.aspx'
+
+### A note on Safari
+
+In our testing, it doesn't work well. Sometimes Safari Technology Preview works better, sometimes 
+only Safari works at all. And as of May 2021, our ability to write user agent strings
+and languages for either flavor of Safari seems not to work on macOS Big Sur/Safari 14.
 
 ## Contributing
 
