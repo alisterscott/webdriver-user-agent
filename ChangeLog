@@ -1,3 +1,23 @@
+=== Version 7.9 / 2022-5-25
+* Enhancements (Thanks samnissen)
+  * Fixed yaml load issues with latest psych gem (Thanks samnissen)
+  * Fixed a bug with Safari browser (Thanks samnissen)
+  * Updated to Ruby 3.1.2 (Thanks sandeepnagra)
+
+=== Version 7.8 / 2020-7-10
+* Enhancements (Thanks samnissen)
+  * Updated devices
+  * Fixed provided options and updated unit tests
+
+=== Version 7.7 / 2020-7-10
+* version yanked
+
+=== Version 7.6 / 2019-2-11
+* Enhancements (Thanks samnissen)
+  * Added support for setting browswer language
+  * Replaced deprecated selenium switches
+  * Allowed Safari browser and updated requirements to support it
+
 === Version 7.5 / 2017-8-22
 * Enhancements
   * Added support for modern iPhone and iPad sizes
