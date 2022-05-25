@@ -7,7 +7,7 @@ require 'selenium-webdriver'
 require 'watir'
 require 'webdrivers'
 
-CHROMEBROWSER_UICHROME_HEIGHT         = 123
+CHROMEBROWSER_UICHROME_HEIGHT         = 124
 CHROMEBROWSER_UICHROME_HEIGHT_TALL    = 50
 CHROMEBROWSER_UI_MINIMUM_HEIGHT       = 289
 FIREFOXBROWSER_UICHROME_HEIGHT        = 74
@@ -85,7 +85,7 @@ describe "webdriver user agent" do
   let(:height_script) { 'return Math.max(document.documentElement.clientHeight, window.innerHeight || 0)' }
 
   after :each do
-    driver.quit if defined?(driver)
+    driver.quit if defined?(driver) rescue Selenium::WebDriver::Error::SessionNotCreatedError
     browser.close if defined?(browser) && browser&.is_a?(Watir::Browser)
     `defaults delete com.apple.SafariTechnologyPreview CustomUserAgent >/dev/null 2>/dev/null`
     `defaults delete com.apple.SafariTechnologyPreview AppleLanguages >/dev/null 2>/dev/null`
@@ -207,7 +207,7 @@ describe "webdriver user agent" do
   end
 
   context "Chrome browser, iPhone XS agent, landscape orientation" do
-    let(:device_key) { :ipad }
+    let(:device_key) { :iphone6 }
     let(:device) { devices[device_key] }
     let(:orientation) { :landscape }
     let(:driver) do
@@ -250,7 +250,7 @@ describe "webdriver user agent" do
   end
 
   context "Chrome browser, Android tablet agent, landscape orientation" do
-    let(:device_key) { :android_tablet }
+    let(:device_key) { :android_phone }
     let(:device) { devices[device_key] }
     let(:orientation) { :landscape }
     let(:driver) do
